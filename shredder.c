@@ -5,7 +5,7 @@
 
 void timeoutHandler(int signum) {
 	char message[] = "Timed out - aborting...";
-	write(stdout, message, 25);
+	writeStdout(message, 25);
 	_exit(1);
 }
 
@@ -19,4 +19,6 @@ int main(int argc, char* argv[]) {
 	while (1) {
 
 	}
+
+	exit(EXIT_SUCCESS);
 }

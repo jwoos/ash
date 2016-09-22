@@ -1,3 +1,9 @@
 void writeStdout(char [], int);
 
-char* readStdin(int);
+void writeStderr(char [], int);
+
+char* readStdin();
+
+char getCharFromStdin();
+
+void printError(char*, int);
