@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 extern const int OKAY = 0;
 extern const int ERROR = 1;
@@ -21,7 +22,9 @@ char getCharFromStdin() {
 }
 
 char* readStdin() {
-	unsigned int size = 1024;
+	unsigned int original = 256;
+	unsigned int size = 256;
+	unsigned int position = 0;
 	char* buffer = malloc(sizeof(char) * size);
 	char c;
 
@@ -42,7 +45,7 @@ char* readStdin() {
 		position++;
 
 		if (position >= size) {
-			size += size;
+			size += original;
 			buffer = realloc(buffer, size);
 			if (!buffer) {
 				printError("Error allocating\n", 1);
@@ -51,7 +54,7 @@ char* readStdin() {
 	}
 }
 
-void printError(char* message, int shouldExit = 1) {
+void printError(char* message, int shouldExit) {
 	perror(message);
 	if (shouldExit) {
 		_exit(EXIT_FAILURE);

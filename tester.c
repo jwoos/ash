@@ -9,6 +9,9 @@
 void handler(int signum) {
 	char message[] = "Timed out - aborting...\n";
 	writeStdout(message, sizeof message);
+
+	char* stdinRead = readStdin();
+	writeStdout(stdinRead, 100);
 	_exit(0);
 }
 
