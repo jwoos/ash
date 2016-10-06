@@ -6,18 +6,21 @@
 
 #include "utils.h"
 
-void handler(int signum) {
-	char message[] = "Timed out - aborting...\n";
-	writeStdout(message, sizeof message);
-
-	char* stdinRead = readStdin();
-	writeStdout(stdinRead, 100);
-	_exit(0);
-}
-
 int main(int argc, char* argv[]) {
-	signal(SIGALRM, handler);
-	alarm(1);
-	while(1);
+	while (1) {
+		printf("shell > ");
+		fflush(stdout);
+
+		char* commandLine = readStdin();
+		char* command = getCommand(commandLine);
+
+		printf("commandLine: %s\n", commandLine);
+		printf("command: %s\n", command);
+
+		free(commandLine);
+		free(command);
+	}
+
+	_exit(EXIT_SUCCESS);
 }
 

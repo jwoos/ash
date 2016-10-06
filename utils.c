@@ -2,15 +2,28 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-extern const int OKAY = 0;
-extern const int ERROR = 1;
+const int OKAY = 0;
+const int ERROR = 1;
 
-void writeStdout(char message[], int bytes) {
-	write(STDOUT_FILENO, message, bytes);
+void printError(char* message, int shouldExit) {
+	perror(message);
+
+	if (shouldExit) {
+		_exit(EXIT_FAILURE);
+	}
 }
 
-void writeStderr(char message[], int bytes) {
-	write(STDERR_FILENO, message, bytes);
+void writeStdout(char* message, int bytes) {
+	if (write(STDOUT_FILENO, message, bytes) < 0) {
+		printError("error writing - exiting", 1);
+	}
+}
+
+// don't use this - use printError or perror
+void writeStderr(char* message, int bytes) {
+	if (write(STDERR_FILENO, message, bytes) < 0) {
+		printError("error writing - exiting", 1);
+	}
 }
 
 // don't use malloc
@@ -54,9 +67,71 @@ char* readStdin() {
 	}
 }
 
-void printError(char* message, int shouldExit) {
-	perror(message);
-	if (shouldExit) {
-		_exit(EXIT_FAILURE);
+// this does not take any arguments to the command
+char* getCommand(char* commandLine) {
+	char* buffer = malloc(sizeof(char) * 64);
+
+	unsigned int position = 0;
+
+	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
+		buffer[position] = commandLine[position];
+		position++;
 	}
+
+	return buffer;
+}
+
+// TODO
+char** getArgs(char* commandLine) {
+	char* buffer = malloc(sizeof(char*));
+}
+
+/*
+ *char** parseCommand(char* commandLine) {
+ *    char* temp;
+ *
+ *    int inQuotations = 0;
+ *    char quotationType = '';
+ *
+ *    int index = 0;
+ *    int commandIndex = 0;
+ *
+ *    int size = 1;
+ *    char** commands = malloc(sizeof(char*) * size);
+ *
+ *    while (commandLine[index] != '\0' && commandLine != '\n') {
+ *        // deal with space
+ *        if (commandLine[index] == ' ' && !inQuotations) {
+ *            commandIndex++;
+ *            size++;
+ *            commands = realloc(commands, size);
+ *            commands[commandIndex = ]
+ *        }
+ *
+ *        if (commandLine[index] == '\'') {
+ *            if (!inQuotations) {
+ *                quotationType = '\'';
+ *                inQuotations = 1;
+ *            } else {
+ *                quotationType = '';
+ *                inQuotations = 0;
+ *                commandIndex++;
+ *                size++;
+ *            }
+ *        } else if (commandLine[index] == '"') {
+ *            quotationType = '"';
+ *            inQuotations = 1;
+ *        }
+ *
+ *        index++;
+ *    }
+ *}
+ */
+
+char** generateEmptyStringArr() {
+	char** buffArr = malloc(sizeof(char*));
+	buffArr[0] = malloc(sizeof(char));
+	buffArr[0][0] = '\0';
+
+	return buffArr;
 }

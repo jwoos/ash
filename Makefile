@@ -1,23 +1,23 @@
 WARNING = -Wall
 
-ALL = utils
-ALL_O = $(addsuffix .o, ${ALL})
+ARG =
 
-default: clean shredder
+ALL = utils.o
+EXECUTABLES = tester shell
+
+default: clean shell tester
 
 debug: default
-	valgrind --leak-check=full -v ./shredder
+	valgrind --leak-check=full -v ./shell
 
-shredder: ${ALL}
-	${CC} ${WARNING} $@.c ${ALL_O} -o $@
-	./$@
+shell: ${ALL}
+	${CC} ${WARNING} $@.c ${ALL} -o $@
 
 tester: ${ALL}
-	${CC} ${WARNING} $@.c ${ALL_O} -o $@
-	./$@
+	${CC} ${WARNING} $@.c ${ALL} -o $@
 
-utils:
-	${CC} ${WARNING} -c $@.c
+utils.o:
+	${CC} ${WARNING} -c $(basename $@).c
 
 clean:
-	rm ${ALL} shredder
+	rm ${ALL} ${EXECUTABLES}
