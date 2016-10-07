@@ -1,5 +1,5 @@
 *.swo
 *.swp
 *.o
-shredder
+shell
 tester
