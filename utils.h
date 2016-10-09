@@ -18,12 +18,14 @@ void printError(char*, int);
 
 char* getCommand(char*);
 
-char** getArgs(char*);
+//char** getArgs(char*);
 
-char** parseCommand(char*);
+//char** parseCommand(char*);
 
 char** generateEmptyStringArr();
 
-void freeMemory(void**, int);
+//void freeMemory(void**, int);
+
+int countChars(char* buf);
 
 #endif

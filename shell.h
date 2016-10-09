@@ -10,12 +10,8 @@
 
 #include "utils.h"
 
-void setPID(int);
-
-int getPID();
-
-void timeoutHandler(int);
-
 void prompt();
+
+int builtIns(char*);
 
 #endif

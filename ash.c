@@ -9,15 +9,7 @@
 #include "utils.h"
 
 int main(int argc, char* argv[]) {
-	int seconds = 0;
 	int PID;
-
-	// set up alarm signal handling
-	signal(SIGALRM, *timeoutHandler);
-
-	if (argc >= 2) {
-		seconds = atoi(argv[1]);
-	}
 
 	while (1) {
 		prompt();
@@ -28,22 +20,20 @@ int main(int argc, char* argv[]) {
 		char** args = generateEmptyStringArr();
 		char** env = generateEmptyStringArr();
 
+		int cont = builtIns(command);
+
+		if (cont) {
+			continue;
+		}
+
 		int status;
 
 		PID = fork();
-		setPID(PID);
-
-		// set alarm signal to send after X seconds
-		if (seconds > 0) {
-			alarm(seconds);
-		}
 
 		if (PID == 0) {
 			if (execve(command, args, env) == -1) {
 				printError("Command failure", 1);
 			}
-			// cancel alarm
-			alarm(0);
 		} else if (PID < 0) {
 			printError("Error forking process", 0);
 		} else {

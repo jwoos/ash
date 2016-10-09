@@ -133,4 +133,14 @@ char** generateEmptyStringArr() {
 	return buffArr;
 }
 
-void freeMemory(void** items, int count) {}
+/*void freeMemory(void** items, int count) {}*/
+
+int countChars(char* buf) {
+	int index = 0;
+
+	do {
+		index++;
+	} while (buf[index] != '\n');
+
+	return index;
+}

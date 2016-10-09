@@ -1,22 +1,26 @@
+#include "sds/sds.h"
 #include "shell.h"
-
-// TODO figure out a better way to pass around this
-int PID;
-
-void setPID(int childPID) {
-	PID = childPID;
-}
-
-int getPID() {
-	return PID;
-}
-
-void timeoutHandler(int signum) {
-	printError("Timed out, aborting...", 0);
-
-	kill(PID, SIGKILL);
-}
 
 void prompt() {
 	writeStdout("shell > ", 9);
+}
+
+int builtIns(char* command) {
+	// need a checker
+	if (command == "pwd") {
+		int size = 1024;
+		char cwd[size];
+
+		// TODO check errno for array overflow
+		if (getcwd(cwd, size) == NULL) {
+			printError("Failed to get current directory - exiting", 1);
+		}
+
+		int actualSize = countChars(cwd);
+
+		writeStdout(cwd, actualSize);
+		return 1;
+	}
+
+	return 0;
 }
