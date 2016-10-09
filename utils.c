@@ -1,9 +1,4 @@
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-const int OKAY = 0;
-const int ERROR = 1;
+#include "utils.h"
 
 void printError(char* message, int shouldExit) {
 	perror(message);
@@ -82,9 +77,11 @@ char* getCommand(char* commandLine) {
 }
 
 // TODO
-char** getArgs(char* commandLine) {
-	char* buffer = malloc(sizeof(char*));
-}
+/*
+ *char** getArgs(char* commandLine) {
+ *    char* buffer = malloc(sizeof(char*));
+ *}
+ */
 
 /*
  *char** parseCommand(char* commandLine) {
@@ -135,3 +132,5 @@ char** generateEmptyStringArr() {
 
 	return buffArr;
 }
+
+void freeMemory(void** items, int count) {}
