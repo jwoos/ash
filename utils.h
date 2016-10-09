@@ -2,9 +2,11 @@
 #define ASH_UTILS_H
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <unistd.h>
-#include <stdlib.h>
+
+#include "sds/sds.h"
 
 void writeStdout(char [], int);
 
@@ -27,5 +29,7 @@ char** generateEmptyStringArr();
 //void freeMemory(void**, int);
 
 int countChars(char* buf);
+
+int sdsequal(sds a, sds b);
 
 #endif

@@ -6,7 +6,6 @@
 #include <signal.h>
 
 #include "shell.h"
-#include "utils.h"
 
 int main(int argc, char* argv[]) {
 	int PID;

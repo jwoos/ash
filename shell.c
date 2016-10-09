@@ -1,4 +1,3 @@
-#include "sds/sds.h"
 #include "shell.h"
 
 void prompt() {
@@ -6,19 +5,20 @@ void prompt() {
 }
 
 int builtIns(char* command) {
-	// need a checker
-	if (command == "pwd") {
-		int size = 1024;
-		char cwd[size];
+	// NEED A VECTOR TO KEEP TRACK OF SDS POINTERS
+	sds str = sdsnew(command);
+	sds pwd = sdsnew("pwd");
+
+	if (sdsequal(str, sdsnew("pwd"))) {
+		char cwd[512];
 
 		// TODO check errno for array overflow
-		if (getcwd(cwd, size) == NULL) {
-			printError("Failed to get current directory - exiting", 1);
-		}
+		getcwd(cwd, sizeof(cwd));
 
 		int actualSize = countChars(cwd);
 
 		writeStdout(cwd, actualSize);
+		writeStdout("\n", 1);
 		return 1;
 	}
 

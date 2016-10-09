@@ -140,7 +140,24 @@ int countChars(char* buf) {
 
 	do {
 		index++;
-	} while (buf[index] != '\n');
+	} while (buf[index] != '\0');
 
 	return index;
+}
+
+int sdsequal(sds a, sds b) {
+	int sizeA = sdslen(a);
+	int sizeB = sdslen(b);
+
+	if (sizeA != sizeB) {
+		return 0;
+	}
+
+	for (int i = 0; i <= sizeA; i++) {
+		if (a[i] != b[i]) {
+			return 0;
+		}
+	}
+
+	return 1;
 }
