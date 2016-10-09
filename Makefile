@@ -2,7 +2,7 @@ WARNING = -Wall
 
 ARG =
 
-ALL = utils.o shell.o
+ALL = utils.o shell.o sds.o
 EXECUTABLES = tester ash
 
 default: clean-ash ash
@@ -22,11 +22,14 @@ tester: ${ALL}
 
 # shell functionality
 shell.o:
-	${CC} ${WARNING} -c $(basename $@).c
+	${CC} ${WARNING} -c shell.c
 
 # general usage functions
 utils.o:
-	${CC} ${WARNING} -c $(basename $@).c
+	${CC} ${WARNING} -c utils.c
+
+sds.o:
+	${CC} ${WARNING} -c sds/sds.c
 
 clean-tester: clean-objects
 	rm tester
