@@ -15,11 +15,11 @@ void prompt();
 
 void notAvailable();
 
-int builtIns(char*);
+int builtIns(char*, char*);
 
 sds getCommand(sds);
 
-//sds getArg(sds);
+char** getArg(sds);
 
 //char** parseCommand(char*);
 

@@ -13,13 +13,13 @@ int main(int argc, char* argv[]) {
 	while (1) {
 		prompt();
 
-		sds commandLine = readStdin();
+		char* commandLine = readStdin();
 		char* command = getCommand(commandLine);
-		/*sds arg = getArg(commandLine);*/
+		char** arg = getArg(commandLine);
 		char** args = generateEmptyStringArr();
 		char** env = generateEmptyStringArr();
 
-		int cont = builtIns(command);
+		int cont = builtIns(command, arg[0]);
 
 		if (!cont) {
 			int status;
@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 
 		free(commandLine);
 		free(command);
-		/*sdsfree(arg);*/
+		free(arg);
 		free(args[0]);
 		free(args);
 		free(env[0]);

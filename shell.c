@@ -8,7 +8,7 @@ void notAvailable() {
 	writeStdout("Not supported yet\n", 18);
 }
 
-int builtIns(char* command) {
+int builtIns(char* command, char* arg) {
 	Vector* sdsVector = vectorInitialize();
 
 	sds str = sdsinit(sdsVector, command);
@@ -39,7 +39,9 @@ int builtIns(char* command) {
 
 		matched = 1;
 	} else if (sdsequal(str, cd)) {
-		notAvailable();
+		if (chdir(arg) < 0) {
+			printError("Failed to change directory", 1);
+		};
 
 		matched = 1;
 	} else if (sdsequal(str, quit)) {
@@ -52,7 +54,7 @@ int builtIns(char* command) {
 	return matched;
 }
 
-char* getCommand(sds commandLine) {
+char* getCommand(char* commandLine) {
 	char* buffer = malloc(sizeof(char) * 64);
 
 	unsigned int position = 0;
@@ -66,11 +68,29 @@ char* getCommand(sds commandLine) {
 	return buffer;
 }
 
-/*
- *sds getArg(sds commandLine) {
- *    char* buffer = malloc(sizeof(char*));
- *}
- */
+char** getArg(char* commandLine) {
+	char** args = malloc(sizeof(char*));
+	args[0] = malloc(sizeof(char) * 64);
+	char* buffer = args[0];
+
+	unsigned int position = 0;
+
+	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
+		position++;
+	}
+	position++;
+
+	unsigned int buffPosition = 0;
+
+	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
+		buffer[buffPosition] = commandLine[position];
+		buffPosition++;
+		position++;
+	}
+	buffer[buffPosition] = '\0';
+
+	return args;
+}
 
 /*
  *char** parseCommand(char* commandLine) {
