@@ -21,8 +21,14 @@ int builtIns(char* command) {
 	if (sdsequal(str, pwd)) {
 		char cwd[512];
 
-		// TODO check errno for array overflow
 		getcwd(cwd, sizeof(cwd));
+
+		if (errno == ERANGE) {
+			char biggerCwd[1024];
+			getcwd(biggerCwd, sizeof(biggerCwd));
+
+			cwd = biggerCwd;
+		}
 
 		int actualSize = countChars(cwd);
 
