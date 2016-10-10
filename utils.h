@@ -10,6 +10,8 @@
 
 #include "vector.h"
 
+void flush();
+
 void printError(sds, int);
 
 void writeStdout(sds, int);

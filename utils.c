@@ -3,11 +3,19 @@
 static char getCharFromStdin() {
 	char buffer[1];
 
-	if (read(STDIN_FILENO, buffer, 1) < 0) {
+	int bytesRead = read(STDIN_FILENO, buffer, 1);
+
+	if (bytesRead < 0) {
 		printError("error reading - exiting", 1);
+	} else if (bytesRead == 0) {
+		buffer[0] = '\0';
 	}
 
 	return *buffer;
+}
+
+void flush() {
+	writeStdout("\n", 1);
 }
 
 void printError(sds message, int shouldExit) {
@@ -45,7 +53,9 @@ char* readStdin() {
 	while (1) {
 		c = getCharFromStdin();
 
-		if (c == EOF || c == '\n') {
+		if (c == '\0' && position == 0) {
+			_exit(EXIT_SUCCESS);
+		} if (c == '\n') {
 			buffer[position] = '\0';
 			break;
 		}

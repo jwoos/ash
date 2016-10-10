@@ -7,8 +7,26 @@
 
 #include "shell.h"
 
+int PID;
+
+void sigintHandler() {
+	if (PID > 0) {
+		kill(PID, SIGINT);
+		PID = 0;
+		flush();
+	} else {
+		flush();
+		prompt();
+	}
+}
+
+// TODO move to sigact
+void handleSignals() {
+	signal(SIGINT, *sigintHandler);
+}
+
 int main(int argc, char* argv[]) {
-	int PID;
+	handleSignals();
 
 	while (1) {
 		prompt();
@@ -21,7 +39,7 @@ int main(int argc, char* argv[]) {
 
 		int cont = builtIns(command, arg[0]);
 
-		if (!cont) {
+		if (!cont && command[0] != '\0') {
 			int status;
 
 			PID = fork();
