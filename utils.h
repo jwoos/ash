@@ -30,8 +30,12 @@ char** generateEmptyStringArr();
 
 //void freeMemory(void**, int);
 
-int countChars(char* buf);
+int countChars(char*);
 
-int sdsequal(const sds a, const sds b);
+int sdsequal(const sds, const sds);
+
+sds sdsinit(Vector*, char*);
+
+void sdsfreeall(Vector*);
 
 #endif

@@ -4,12 +4,21 @@ void prompt() {
 	writeStdout("shell > ", 9);
 }
 
-int builtIns(char* command) {
-	// NEED A VECTOR TO KEEP TRACK OF SDS POINTERS
-	sds str = sdsnew(command);
-	sds pwd = sdsnew("pwd");
+void notAvailable() {
+	writeStdout("Not supported yet\n", 18);
+}
 
-	if (sdsequal(str, sdsnew("pwd"))) {
+int builtIns(char* command) {
+	Vector* sdsVector = vectorInitialize();
+
+	sds str = sdsinit(sdsVector, command);
+	sds pwd = sdsinit(sdsVector, "pwd");
+	sds cd = sdsinit(sdsVector, "cd");
+	sds quit = sdsinit(sdsVector, "exit");
+
+	int matched = 0;
+
+	if (sdsequal(str, pwd)) {
 		char cwd[512];
 
 		// TODO check errno for array overflow
@@ -19,8 +28,18 @@ int builtIns(char* command) {
 
 		writeStdout(cwd, actualSize);
 		writeStdout("\n", 1);
-		return 1;
+
+		matched = 1;
+	} else if (sdsequal(str, cd)) {
+		notAvailable();
+
+		matched = 1;
+	} else if (sdsequal(str, quit)) {
+		_exit(EXIT_SUCCESS);
+
+		matched = 1;
 	}
 
-	return 0;
+	sdsfreeall(sdsVector);
+	return matched;
 }

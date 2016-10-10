@@ -12,6 +12,8 @@
 
 void prompt();
 
+void notAvailable();
+
 int builtIns(char*);
 
 #endif

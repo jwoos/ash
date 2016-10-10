@@ -135,6 +135,7 @@ char** generateEmptyStringArr() {
 
 /*void freeMemory(void** items, int count) {}*/
 
+// not binary safe
 int countChars(char* buf) {
 	int index = 0;
 
@@ -160,4 +161,22 @@ int sdsequal(const sds a, const sds b) {
 	}
 
 	return 1;
+}
+
+sds sdsinit(Vector* sdsVector, char* str) {
+	sds sdsStr = sdsnew(str);
+
+	vectorPush(sdsVector, sdsStr);
+
+	return sdsStr;
+}
+
+void sdsfreeall(Vector* sdsVector) {
+	int size = sdsVector -> size;
+
+	for (int i = 0; i < size; i++) {
+		sdsfree(vectorGet(sdsVector, i));
+	}
+
+	vectorDeconstruct(sdsVector);
 }
