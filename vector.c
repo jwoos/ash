@@ -3,7 +3,7 @@
 static void increaseCapacity(Vector* vector) {
 	vector -> capacity *= 2;
 
-	vector -> arr = realloc(vector -> arr, sizeof(int) * (vector -> capacity));
+	vector -> arr = realloc(vector -> arr, sizeof(void*) * (vector -> capacity));
 }
 
 Vector* vectorInitialize() {
@@ -11,7 +11,7 @@ Vector* vectorInitialize() {
 
 	vector -> size = 0;
 	vector -> capacity = 1;
-	vector -> arr = malloc(sizeof(int));
+	vector -> arr = malloc(sizeof(void*));
 
 	return vector;
 }

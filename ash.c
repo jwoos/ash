@@ -13,35 +13,34 @@ int main(int argc, char* argv[]) {
 	while (1) {
 		prompt();
 
-		char* commandLine = readStdin();
-		// parse whole input for command
+		sds commandLine = readStdin();
 		char* command = getCommand(commandLine);
+		/*sds arg = getArg(commandLine);*/
 		char** args = generateEmptyStringArr();
 		char** env = generateEmptyStringArr();
 
 		int cont = builtIns(command);
 
-		if (cont) {
-			continue;
-		}
+		if (!cont) {
+			int status;
 
-		int status;
+			PID = fork();
 
-		PID = fork();
-
-		if (PID == 0) {
-			if (execve(command, args, env) == -1) {
-				printError("Command failure", 1);
+			if (PID == 0) {
+				if (execve(command, args, env) == -1) {
+					printError("Command failure", 1);
+				}
+			} else if (PID < 0) {
+				printError("Error forking process", 0);
+			} else {
+				// wait for child process to terminate
+				wait(&status);
 			}
-		} else if (PID < 0) {
-			printError("Error forking process", 0);
-		} else {
-			// wait for child process to terminate
-			wait(&status);
 		}
 
-		free(command);
 		free(commandLine);
+		free(command);
+		/*sdsfree(arg);*/
 		free(args[0]);
 		free(args);
 		free(env[0]);

@@ -1,6 +1,16 @@
 #include "utils.h"
 
-void printError(char* message, int shouldExit) {
+static char getCharFromStdin() {
+	char buffer[1];
+
+	if (read(STDIN_FILENO, buffer, 1) < 0) {
+		printError("error reading - exiting", 1);
+	}
+
+	return *buffer;
+}
+
+void printError(sds message, int shouldExit) {
 	perror(message);
 
 	if (shouldExit) {
@@ -8,25 +18,17 @@ void printError(char* message, int shouldExit) {
 	}
 }
 
-void writeStdout(char* message, int bytes) {
+void writeStdout(sds message, int bytes) {
 	if (write(STDOUT_FILENO, message, bytes) < 0) {
 		printError("error writing - exiting", 1);
 	}
 }
 
 // don't use this - use printError or perror
-void writeStderr(char* message, int bytes) {
+void writeStderr(sds message, int bytes) {
 	if (write(STDERR_FILENO, message, bytes) < 0) {
 		printError("error writing - exiting", 1);
 	}
-}
-
-// don't use malloc
-char getCharFromStdin() {
-	char buffer[1];
-	read(STDIN_FILENO, buffer, 1);
-
-	return *buffer;
 }
 
 char* readStdin() {
@@ -45,8 +47,7 @@ char* readStdin() {
 
 		if (c == EOF || c == '\n') {
 			buffer[position] = '\0';
-
-			return buffer;
+			break;
 		}
 
 		buffer[position] = c;
@@ -60,70 +61,9 @@ char* readStdin() {
 			}
 		}
 	}
-}
-
-// this does not take any arguments to the command
-char* getCommand(char* commandLine) {
-	char* buffer = malloc(sizeof(char) * 64);
-
-	unsigned int position = 0;
-
-	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
-		buffer[position] = commandLine[position];
-		position++;
-	}
 
 	return buffer;
 }
-
-// TODO
-/*
- *char** getArgs(char* commandLine) {
- *    char* buffer = malloc(sizeof(char*));
- *}
- */
-
-/*
- *char** parseCommand(char* commandLine) {
- *    char* temp;
- *
- *    int inQuotations = 0;
- *    char quotationType = '';
- *
- *    int index = 0;
- *    int commandIndex = 0;
- *
- *    int size = 1;
- *    char** commands = malloc(sizeof(char*) * size);
- *
- *    while (commandLine[index] != '\0' && commandLine != '\n') {
- *        // deal with space
- *        if (commandLine[index] == ' ' && !inQuotations) {
- *            commandIndex++;
- *            size++;
- *            commands = realloc(commands, size);
- *            commands[commandIndex = ]
- *        }
- *
- *        if (commandLine[index] == '\'') {
- *            if (!inQuotations) {
- *                quotationType = '\'';
- *                inQuotations = 1;
- *            } else {
- *                quotationType = '';
- *                inQuotations = 0;
- *                commandIndex++;
- *                size++;
- *            }
- *        } else if (commandLine[index] == '"') {
- *            quotationType = '"';
- *            inQuotations = 1;
- *        }
- *
- *        index++;
- *    }
- *}
- */
 
 char** generateEmptyStringArr() {
 	char** buffArr = malloc(sizeof(char*));
@@ -132,8 +72,6 @@ char** generateEmptyStringArr() {
 
 	return buffArr;
 }
-
-/*void freeMemory(void** items, int count) {}*/
 
 // not binary safe
 int countChars(char* buf) {
@@ -145,6 +83,10 @@ int countChars(char* buf) {
 
 	return index;
 }
+
+/*
+ * sds functions
+ */
 
 int sdsequal(const sds a, const sds b) {
 	int sizeA = sdslen(a);
@@ -175,7 +117,8 @@ void sdsfreeall(Vector* sdsVector) {
 	int size = sdsVector -> size;
 
 	for (int i = 0; i < size; i++) {
-		sdsfree(vectorGet(sdsVector, i));
+		sds str = vectorGet(sdsVector, i);
+		sdsfree(str);
 	}
 
 	vectorDeconstruct(sdsVector);

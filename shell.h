@@ -17,4 +17,10 @@ void notAvailable();
 
 int builtIns(char*);
 
+sds getCommand(sds);
+
+//sds getArg(sds);
+
+//char** parseCommand(char*);
+
 #endif

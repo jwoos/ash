@@ -10,27 +10,21 @@
 
 #include "vector.h"
 
-void writeStdout(char [], int);
+void printError(sds, int);
 
-void writeStderr(char [], int);
+void writeStdout(sds, int);
+
+void writeStderr(sds, int);
 
 char* readStdin();
 
-char getCharFromStdin();
-
-void printError(char*, int);
-
-char* getCommand(char*);
-
-//char** getArgs(char*);
-
-//char** parseCommand(char*);
-
 char** generateEmptyStringArr();
 
-//void freeMemory(void**, int);
-
 int countChars(char*);
+
+/*
+ * sds functions
+ */
 
 int sdsequal(const sds, const sds);
 
