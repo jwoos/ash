@@ -7,16 +7,18 @@
 #include "shell.h"
 
 int main(int argc, char* argv[]) {
-/*
- *    sds aString = sdsnew("Hello!\n");
- *    sds another = sdsnew("Hello!\n");
- *
- *    if (sdsequal(aString, another)) {
- *        writeStdout("woah\n", 5);
- *    } else {
- *        writeStdout(":(\n", 3);
- *    }
- */
+	Vector* v = vectorInitialize();
+	int* a = malloc(sizeof(int));
+	*a = 10;
+	char* b = malloc(sizeof(char));
+	*b = 'c';
+	vectorPush(v, a);
+	vectorPush(v, b);
+
+	printf("%d\n", v -> size);
+	printf("%d\n", v -> capacity);
+	printf("%d\n", *(int*) vectorGet(v, 0));
+	printf("%c\n", *(char*) vectorGet(v, 1));
 
 	_exit(EXIT_SUCCESS);
 }

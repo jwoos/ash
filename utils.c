@@ -145,7 +145,7 @@ int countChars(char* buf) {
 	return index;
 }
 
-int sdsequal(sds a, sds b) {
+int sdsequal(const sds a, const sds b) {
 	int sizeA = sdslen(a);
 	int sizeB = sdslen(b);
 

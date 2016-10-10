@@ -8,6 +8,8 @@
 
 #include "sds/sds.h"
 
+#include "vector.h"
+
 void writeStdout(char [], int);
 
 void writeStderr(char [], int);
@@ -30,6 +32,6 @@ char** generateEmptyStringArr();
 
 int countChars(char* buf);
 
-int sdsequal(sds a, sds b);
+int sdsequal(const sds a, const sds b);
 
 #endif

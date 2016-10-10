@@ -2,7 +2,7 @@ WARNING = -Wall
 
 ARG =
 
-ALL = utils.o shell.o sds.o
+ALL = utils.o shell.o sds.o vector.o
 EXECUTABLES = tester ash
 
 default: clean-ash ash
@@ -30,6 +30,9 @@ utils.o:
 
 sds.o:
 	${CC} ${WARNING} -c sds/sds.c
+
+vector.o:
+	${CC} ${WARNING} -c vector.c
 
 clean-tester: clean-objects
 	rm tester
