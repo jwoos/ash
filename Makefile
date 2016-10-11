@@ -1,4 +1,4 @@
-WARNING = -Wall
+ARGS = -Wall -std=gnu11 -ggdb -O0
 
 ARG =
 
@@ -14,25 +14,27 @@ debug: default
 
 # shell main
 ash: ${ALL}
-	${CC} ${WARNING} $@.c ${ALL} -o $@
+	${CC} ${ARGS} $@.c ${ALL} -o $@
 
 # separate compilation point for testing reasons
 tester: ${ALL}
-	${CC} ${WARNING} $@.c ${ALL} -o $@
+	${CC} ${ARGS} $@.c ${ALL} -o $@
 
 # shell functionality
 shell.o:
-	${CC} ${WARNING} -c shell.c
+	${CC} ${ARGS} -c shell.c
 
 # general usage functions
 utils.o:
-	${CC} ${WARNING} -c utils.c
+	${CC} ${ARGS} -c utils.c
 
 sds.o:
-	${CC} ${WARNING} -c sds/sds.c
+	${CC} ${ARGS} -c sds/sds.c
 
 vector.o:
-	${CC} ${WARNING} -c vector.c
+	${CC} ${ARGS} -c vector.c
+
+objects: ${ALL}
 
 clean-tester: clean-objects
 	rm tester
