@@ -32,20 +32,17 @@ int main(int argc, char* argv[]) {
 		prompt();
 
 		char* commandLine = readStdin();
-		char* command = getCommand(commandLine);
-		char** arg = getArg(commandLine);
-		char** args = generateEmptyStringArr();
-		char** env = generateEmptyStringArr();
+		char** parsedCommand = parseCommand(commandLine);
 
-		int cont = builtIns(command, arg[0]);
+		int cont = builtIns(parsedCommand[0], parsedCommand[1]);
 
-		if (!cont && command[0] != '\0') {
+		if (!cont && parsedCommand[0] != '\0') {
 			int status;
 
 			PID = fork();
 
 			if (PID == 0) {
-				if (execve(command, args, env) == -1) {
+				if (execvp(parsedCommand[0], parsedCommand) == -1) {
 					printError("Command failure", 1);
 				}
 			} else if (PID < 0) {
@@ -57,12 +54,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		free(commandLine);
-		free(command);
-		free(arg);
-		free(args[0]);
-		free(args);
-		free(env[0]);
-		free(env);
+		freeArray((void**)parsedCommand, 3);
 	}
 
 	_exit(EXIT_SUCCESS);

@@ -24,6 +24,8 @@ char** generateEmptyStringArr();
 
 int countChars(char*);
 
+void freeArray(void**, int);
+
 /*
  * sds functions
  */

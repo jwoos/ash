@@ -21,6 +21,6 @@ sds getCommand(sds);
 
 char** getArg(sds);
 
-//char** parseCommand(char*);
+char** parseCommand(char*);
 
 #endif

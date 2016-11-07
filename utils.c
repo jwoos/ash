@@ -43,11 +43,11 @@ char* readStdin() {
 	unsigned int original = 256;
 	unsigned int size = 256;
 	unsigned int position = 0;
-	char* buffer = malloc(sizeof(char) * size);
+	char* buffer = calloc(size, sizeof(char));
 	char c;
 
 	if (!buffer) {
-		printError("Error allocating\n", 1);
+		printError("Error allocating", 1);
 	}
 
 	while (1) {
@@ -67,7 +67,7 @@ char* readStdin() {
 			size += original;
 			buffer = realloc(buffer, size);
 			if (!buffer) {
-				printError("Error allocating\n", 1);
+				printError("Error allocating", 1);
 			}
 		}
 	}
@@ -92,6 +92,14 @@ int countChars(char* buf) {
 	} while (buf[index] != '\0');
 
 	return index;
+}
+
+void freeArray(void** arr, int size) {
+	for (int i = 0; i < size; i++) {
+		free(arr[i]);
+	}
+
+	free(arr);
 }
 
 /*

@@ -92,44 +92,45 @@ char** getArg(char* commandLine) {
 	return args;
 }
 
-/*
- *char** parseCommand(char* commandLine) {
- *    char* temp;
- *
- *    int inQuotations = 0;
- *    char quotationType = '';
- *
- *    int index = 0;
- *    int commandIndex = 0;
- *
- *    int size = 1;
- *    char** commands = malloc(sizeof(char*) * size);
- *
- *    while (commandLine[index] != '\0' && commandLine != '\n') {
- *        // deal with space
- *        if (commandLine[index] == ' ' && !inQuotations) {
- *            commandIndex++;
- *            size++;
- *            commands = realloc(commands, size);
- *            commands[commandIndex = ]
- *        }
- *
- *        if (commandLine[index] == '\'') {
- *            if (!inQuotations) {
- *                quotationType = '\'';
- *                inQuotations = 1;
- *            } else {
- *                quotationType = '';
- *                inQuotations = 0;
- *                commandIndex++;
- *                size++;
- *            }
- *        } else if (commandLine[index] == '"') {
- *            quotationType = '"';
- *            inQuotations = 1;
- *        }
- *
- *        index++;
- *    }
- *}
- */
+char** parseCommand(char* commandLine) {
+	// args will contain the actual command and the following arguments
+	char** args = malloc(sizeof(char*));
+	args[0] = calloc(64, sizeof(char));
+
+	unsigned int bufferSize = 64;
+	unsigned int arrayIndex = 0;
+	unsigned int buffPosition = 0;
+	unsigned int position = 0;
+
+	while (commandLine[position] != '\0' && commandLine[position] != '\n') {
+		if (commandLine[position] == ' ') {
+			if (commandLine[position + 1] == ' ' || !commandLine[position]) {
+				break;
+			}
+
+			arrayIndex++;
+			buffPosition = 0;
+			bufferSize = 64;
+			args = realloc(args, sizeof(char*) * (arrayIndex + 1));
+			args[arrayIndex] = calloc(bufferSize, sizeof(char));
+			position++;
+			continue;
+		}
+
+		if (buffPosition == bufferSize) {
+			bufferSize *= 2;
+			args[arrayIndex] = realloc(args[arrayIndex], sizeof(char) * bufferSize);
+		}
+
+		args[arrayIndex][buffPosition] = commandLine[position];
+
+		position++;
+		buffPosition++;
+	}
+
+	arrayIndex++;
+	args = realloc(args, sizeof(char*) * (arrayIndex + 1));
+	args[arrayIndex] = NULL;
+
+	return args;
+}
