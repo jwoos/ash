@@ -31,8 +31,9 @@ int main(int argc, char* argv[]) {
 	while (1) {
 		prompt();
 
+		int arraySize = 0;
 		char* commandLine = readStdin();
-		char** parsedCommand = parseCommand(commandLine);
+		char** parsedCommand = parseCommand(commandLine, &arraySize);
 
 		int cont = builtIns(parsedCommand[0], parsedCommand[1]);
 
@@ -54,7 +55,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		free(commandLine);
-		freeArray((void**)parsedCommand, 3);
+		freeArray((void**)parsedCommand, arraySize);
 	}
 
 	_exit(EXIT_SUCCESS);

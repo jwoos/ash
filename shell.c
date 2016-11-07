@@ -57,7 +57,7 @@ int builtIns(char* command, char* arg) {
 char* getCommand(char* commandLine) {
 	char* buffer = malloc(sizeof(char) * 64);
 
-	unsigned int position = 0;
+	int position = 0;
 
 	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
 		buffer[position] = commandLine[position];
@@ -73,14 +73,14 @@ char** getArg(char* commandLine) {
 	args[0] = malloc(sizeof(char) * 64);
 	char* buffer = args[0];
 
-	unsigned int position = 0;
+	int position = 0;
 
 	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
 		position++;
 	}
 	position++;
 
-	unsigned int buffPosition = 0;
+	int buffPosition = 0;
 
 	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
 		buffer[buffPosition] = commandLine[position];
@@ -92,15 +92,15 @@ char** getArg(char* commandLine) {
 	return args;
 }
 
-char** parseCommand(char* commandLine) {
+char** parseCommand(char* commandLine, int* arraySize) {
 	// args will contain the actual command and the following arguments
 	char** args = malloc(sizeof(char*));
 	args[0] = calloc(64, sizeof(char));
 
-	unsigned int bufferSize = 64;
-	unsigned int arrayIndex = 0;
-	unsigned int buffPosition = 0;
-	unsigned int position = 0;
+	int bufferSize = 64;
+	int arrayIndex = 0;
+	int buffPosition = 0;
+	int position = 0;
 
 	while (commandLine[position] != '\0' && commandLine[position] != '\n') {
 		if (commandLine[position] == ' ') {
@@ -132,5 +132,6 @@ char** parseCommand(char* commandLine) {
 	args = realloc(args, sizeof(char*) * (arrayIndex + 1));
 	args[arrayIndex] = NULL;
 
+	*arraySize = arrayIndex + 1;
 	return args;
 }
