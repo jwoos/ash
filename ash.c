@@ -20,9 +20,19 @@ void sigintHandler() {
 	}
 }
 
-// TODO move to sigact
+void sigactionHandler(int sig) {
+	switch (sig) {
+		case SIGINT: {
+			sigintHandler();
+			break;
+		}
+	}
+}
+
 void handleSignals() {
-	signal(SIGINT, *sigintHandler);
+	struct sigaction act;
+	act.sa_handler = &sigactionHandler;
+	sigaction(SIGINT, &act, NULL);
 }
 
 int main(int argc, char* argv[]) {
