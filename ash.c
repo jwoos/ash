@@ -9,21 +9,22 @@
 
 int PID;
 
-void sigintHandler() {
-	if (PID > 0) {
-		kill(PID, SIGINT);
-		PID = 0;
-		flush();
-	} else {
-		flush();
-		prompt();
-	}
-}
-
 void sigactionHandler(int sig) {
 	switch (sig) {
 		case SIGINT: {
-			sigintHandler();
+			if (PID > 0) {
+				kill(PID, SIGINT);
+				PID = 0;
+				flush();
+			} else {
+				flush();
+				prompt();
+			}
+			break;
+		}
+
+		default: {
+			writeStdout("Nothing matched\n", 15);
 			break;
 		}
 	}
@@ -32,7 +33,10 @@ void sigactionHandler(int sig) {
 void handleSignals() {
 	struct sigaction act;
 	act.sa_handler = &sigactionHandler;
-	sigaction(SIGINT, &act, NULL);
+
+	if (sigaction(SIGINT, &act, NULL) != 0) {
+		printError("signal handler not registered properly", 1);
+	}
 }
 
 int main(int argc, char* argv[]) {
