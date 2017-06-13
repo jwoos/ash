@@ -9,16 +9,13 @@ void notAvailable() {
 }
 
 int builtIns(char* command, char* arg) {
-	Vector* sdsVector = vectorInitialize();
-
-	sds str = sdsinit(sdsVector, command);
-	sds pwd = sdsinit(sdsVector, "pwd");
-	sds cd = sdsinit(sdsVector, "cd");
-	sds quit = sdsinit(sdsVector, "exit");
+	char* pwd = "pwd";
+	char* cd = "cd";
+	char* quit = "exit";
 
 	int matched = 0;
 
-	if (sdsequal(str, pwd)) {
+	if (strEqual(command, pwd)) {
 		char cwd[512];
 		char* ptr;
 
@@ -38,19 +35,18 @@ int builtIns(char* command, char* arg) {
 		writeStdout("\n", 1);
 
 		matched = 1;
-	} else if (sdsequal(str, cd)) {
+	} else if (strEqual(command, cd)) {
 		if (chdir(arg) < 0) {
 			printError("Failed to change directory", 1);
 		};
 
 		matched = 1;
-	} else if (sdsequal(str, quit)) {
+	} else if (strEqual(command, quit)) {
 		_exit(EXIT_SUCCESS);
 
 		matched = 1;
 	}
 
-	sdsfreeall(sdsVector);
 	return matched;
 }
 

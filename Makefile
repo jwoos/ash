@@ -2,7 +2,7 @@ ARGS = -Wall -std=gnu11 -ggdb -O0
 
 ARG =
 
-ALL = utils.o shell.o sds.o vector.o
+ALL = utils.o shell.o vector.o
 EXECUTABLES = tester ash
 
 default: clean-ash ash
@@ -27,9 +27,6 @@ shell.o:
 # general usage functions
 utils.o:
 	${CC} ${ARGS} -c utils.c
-
-sds.o:
-	${CC} ${ARGS} -c sds/sds.c
 
 vector.o:
 	${CC} ${ARGS} -c vector.c
