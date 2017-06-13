@@ -1,48 +1,36 @@
-ARGS = -Wall -std=gnu11 -ggdb -O0
-
-ARG =
+CC = gcc
+WARNING = -Wall -Wextra
+OPTIMIZE = -O0
+DEBUG = -ggdb
+STD = -std=gnu11
+ARGS = $(WARNING) $(OPTIMIZE) $(DEBUG) $(STD)
 
 ALL = utils.o shell.o vector.o
 EXECUTABLES = tester ash
 
-default: clean-ash ash
+default: clean ash
 
-test: clean-tester tester
+test: clean tester
 
 debug: default
-	valgrind --leak-check=full -v ./shell
+	valgrind --leak-check=full -v ./ash
 
 # shell main
 ash: ${ALL}
-	${CC} ${ARGS} $@.c ${ALL} -o $@
+	${CC} ${ARGS} $@.c $^ -o $@
 
 # separate compilation point for testing reasons
 tester: ${ALL}
-	${CC} ${ARGS} $@.c ${ALL} -o $@
+	${CC} ${ARGS} $@.c $^ -o $@
 
-# shell functionality
-shell.o:
-	${CC} ${ARGS} -c shell.c
+%.o: %.cpp
+	${CXX} ${ARGS} -c $^ -o $@
 
-# general usage functions
-utils.o:
-	${CC} ${ARGS} -c utils.c
+clean: .FORCE force
+	rm ${ALL} ${EXECUTABLES}
 
-vector.o:
-	${CC} ${ARGS} -c vector.c
+force:
+	touch ${ALL} ${EXECUTABLES}
 
-objects: ${ALL}
+.FORCE:
 
-clean-tester: clean-objects
-	rm tester
-
-clean-ash: clean-objects
-	rm ash
-
-clean-objects:
-	rm ${ALL}
-
-clean-executables:
-	rm ${EXECUTABLES}
-
-clean: clean-objects clean-executables
