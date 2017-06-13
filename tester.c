@@ -7,9 +7,15 @@
 #include "shell.h"
 
 int main(int argc, char* argv[]) {
-	writeStdout("test\n", 5);
-	writeStdout("\n", 1);
+	char* a = "asdf";
+	char* b = "asdf";
 
-	_exit(EXIT_SUCCESS);
+	bool c = strEqual(a, b);
+
+	if (c) {
+		printf("true");
+	} else {
+		printf("false");
+	}
 }
 

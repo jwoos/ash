@@ -1,22 +1,22 @@
 #ifndef ASH_UTILS_H
 #define ASH_UTILS_H
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <unistd.h>
-
-#include "sds/sds.h"
 
 #include "vector.h"
 
 void flush();
 
-void printError(sds, int);
+void printError(char*, int);
 
-void writeStdout(sds, int);
+void writeStdout(char*, int);
 
-void writeStderr(sds, int);
+void writeStderr(char*, int);
 
 char* readStdin();
 
@@ -26,14 +26,6 @@ int countChars(char*);
 
 void freeArray(void**, int);
 
-/*
- * sds functions
- */
-
-int sdsequal(const sds, const sds);
-
-sds sdsinit(Vector*, char*);
-
-void sdsfreeall(Vector*);
+bool strEqual(char*, char*);
 
 #endif

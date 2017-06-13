@@ -18,7 +18,7 @@ void flush() {
 	writeStdout("\n", 1);
 }
 
-void printError(sds message, int shouldExit) {
+void printError(char* message, int shouldExit) {
 	perror(message);
 
 	if (shouldExit) {
@@ -26,14 +26,14 @@ void printError(sds message, int shouldExit) {
 	}
 }
 
-void writeStdout(sds message, int bytes) {
+void writeStdout(char* message, int bytes) {
 	if (write(STDOUT_FILENO, message, bytes) < 0) {
 		printError("error writing - exiting", 1);
 	}
 }
 
 // don't use this - use printError or perror
-void writeStderr(sds message, int bytes) {
+void writeStderr(char* message, int bytes) {
 	if (write(STDERR_FILENO, message, bytes) < 0) {
 		printError("error writing - exiting", 1);
 	}
@@ -102,42 +102,19 @@ void freeArray(void** arr, int size) {
 	free(arr);
 }
 
-/*
- * sds functions
- */
+bool strEqual(char* a, char* b) {
+	int aLength = strlen(a);
+	int bLength = strlen(b);
 
-int sdsequal(const sds a, const sds b) {
-	int sizeA = sdslen(a);
-	int sizeB = sdslen(b);
-
-	if (sizeA != sizeB) {
-		return 0;
+	if (aLength != bLength) {
+		return false;
 	}
 
-	for (int i = 0; i <= sizeA; i++) {
+	for (int i = 0; i < aLength; i++) {
 		if (a[i] != b[i]) {
-			return 0;
+			return false;
 		}
 	}
 
-	return 1;
-}
-
-sds sdsinit(Vector* sdsVector, char* str) {
-	sds sdsStr = sdsnew(str);
-
-	vectorPush(sdsVector, sdsStr);
-
-	return sdsStr;
-}
-
-void sdsfreeall(Vector* sdsVector) {
-	int size = sdsVector -> size;
-
-	for (int i = 0; i < size; i++) {
-		sds str = vectorGet(sdsVector, i);
-		sdsfree(str);
-	}
-
-	vectorDeconstruct(sdsVector);
+	return true;
 }

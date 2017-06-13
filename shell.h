@@ -17,9 +17,9 @@ void notAvailable();
 
 int builtIns(char*, char*);
 
-sds getCommand(sds);
+char* getCommand(char*);
 
-char** getArg(sds);
+char** getArg(char*);
 
 char** parseCommand(char*, int*);
 
