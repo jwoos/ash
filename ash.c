@@ -33,8 +33,10 @@ void sigactionHandler(int sig) {
 void handleSignals() {
 	struct sigaction act;
 	act.sa_handler = &sigactionHandler;
+	// don't reset the handler
+	act.sa_flags = 0;
 
-	if (sigaction(SIGINT, &act, NULL) != 0) {
+	if (sigaction(SIGINT, &act, NULL) < 0) {
 		printError("signal handler not registered properly", 1);
 	}
 }
@@ -51,7 +53,7 @@ int main(int argc, char* argv[]) {
 
 		int cont = builtIns(parsedCommand[0], parsedCommand[1]);
 
-		if (!cont && parsedCommand[0] != '\0') {
+		if (!cont && parsedCommand[0][0] != '\0') {
 			int status;
 
 			PID = fork();
