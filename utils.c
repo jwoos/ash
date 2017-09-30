@@ -1,3 +1,5 @@
+#include <errno.h>
+
 #include "utils.h"
 
 static char getCharFromStdin() {
@@ -6,7 +8,11 @@ static char getCharFromStdin() {
 	int bytesRead = read(STDIN_FILENO, buffer, 1);
 
 	if (bytesRead < 0) {
-		printError("error reading - exiting", 1);
+		if (errno != EINTR) {
+			printError("error reading - exiting", 1);
+		} else {
+			buffer[0] = ' ';
+		}
 	} else if (bytesRead == 0) {
 		buffer[0] = '\0';
 	}
@@ -55,7 +61,7 @@ char* readStdin() {
 
 		if (c == '\0' && position == 0) {
 			_exit(EXIT_SUCCESS);
-		} if (c == '\n') {
+		} else if (c == '\n') {
 			buffer[position] = '\0';
 			break;
 		}
