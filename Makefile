@@ -1,9 +1,5 @@
 CC = gcc
-WARNING = -Wall -Wextra
-OPTIMIZE = -O0
-DEBUG = -ggdb
-STD = -std=gnu11
-CFLAGS = $(WARNING) $(OPTIMIZE) $(DEBUG) $(STD)
+CFLAGS = -Wall -Wextra -std=gnu11 -ggdb -O0
 LDLIBS =
 LDFLAGS =
 
@@ -17,22 +13,21 @@ test: clean tester
 debug: default
 	valgrind --leak-check=full -v ./ash
 
+
+# implicit rule for %.o
+# $(CC) $(CPPFLAGS) $(CFLAGS) -c $@
+
 # shell main
 ash: ${OBJECTS}
-	${CC} ${ARGS} $@.c $^ -o $@
+	$(CC) main.c $^ $(LDFLAGS) $(LDLIBS) -o $@
 
 # separate compilation point for testing reasons
-tester: ${OBJECTS}
-	${CC} ${ARGS} $@.c $^ -o $@
+tester: tester.c ${OBJECTS}
 
-%.o: %.cpp
-	${CXX} ${ARGS} -c $^ -o $@
+clean-objects:
+	touch ${OBJECTS} && rm ${OBJECTS}
 
-clean: .FORCE force
-	rm ${OBJECTS} ${EXECUTABLES}
+clean-executables:
+	touch ${EXECUTABLES} && rm ${EXECUTABLES}
 
-force:
-	touch ${OBJECTS} ${EXECUTABLES}
-
-.FORCE:
-
+clean: clean-objects clean-executables

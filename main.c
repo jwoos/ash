@@ -74,5 +74,6 @@ int main(int argc, char* argv[]) {
 		commandDeconstruct(cmd);
 	}
 
-	_exit(EXIT_SUCCESS);
+	/*_exit(EXIT_SUCCESS);*/
+	return 0;
 }
