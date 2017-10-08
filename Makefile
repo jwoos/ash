@@ -7,7 +7,7 @@ CFLAGS = $(WARNING) $(OPTIMIZE) $(DEBUG) $(STD)
 LDLIBS =
 LDFLAGS =
 
-OBJECTS = utils.o shell.o vector.o
+OBJECTS = utils.o shell.o vector.o input.o
 EXECUTABLES = tester ash
 
 default: clean ash
