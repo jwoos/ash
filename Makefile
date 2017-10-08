@@ -10,9 +10,11 @@ default: clean ash
 
 test: clean tester
 
-debug: default
+debug-memory: default
 	valgrind --leak-check=full -v ./ash
 
+debug-gdb: default
+	gdb ash
 
 # implicit rule for %.o
 # $(CC) $(CPPFLAGS) $(CFLAGS) -c $@
