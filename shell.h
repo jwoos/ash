@@ -15,9 +15,9 @@
 #include "input.h"
 
 
-void prompt();
+void prompt(void);
 
-void notAvailable();
+void notAvailable(void);
 
 uint32_t builtIns(char*, char*);
 

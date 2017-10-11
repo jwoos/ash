@@ -1,10 +1,10 @@
 #include "shell.h"
 
-void prompt() {
+void prompt(void) {
 	writeStdout("shell > ", 9);
 }
 
-void notAvailable() {
+void notAvailable(void) {
 	writeStdout("Not supported yet\n", 18);
 }
 

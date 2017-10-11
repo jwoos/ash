@@ -10,7 +10,7 @@ typedef struct Vector {
 	void** arr;
 } Vector;
 
-Vector* vectorInitialize();
+Vector* vectorInitialize(void);
 
 void vectorDeconstruct(Vector* vector);
 

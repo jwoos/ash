@@ -29,7 +29,5 @@ Command* parseCommand(char*);
 
 char** getArg(char*);
 
-char** _parseCommand(char*, int*);
-
 
 #endif

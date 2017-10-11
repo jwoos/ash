@@ -31,7 +31,7 @@ void sigactionHandler(int sig) {
 	}
 }
 
-void handleSignals() {
+void handleSignals(void) {
 	struct sigaction act;
 	act.sa_handler = &sigactionHandler;
 	// don't reset the handler

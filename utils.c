@@ -2,7 +2,7 @@
 
 #include "utils.h"
 
-static char getCharFromStdin() {
+static char getCharFromStdin(void) {
 	char buffer[1];
 
 	int bytesRead = read(STDIN_FILENO, buffer, 1);
@@ -20,7 +20,7 @@ static char getCharFromStdin() {
 	return *buffer;
 }
 
-void flush() {
+void flush(void) {
 	writeStdout("\n", 1);
 }
 
@@ -45,7 +45,7 @@ void writeStderr(char* message, int bytes) {
 	}
 }
 
-char* readStdin() {
+char* readStdin(void) {
 	unsigned int original = 256;
 	unsigned int size = 256;
 	unsigned int position = 0;

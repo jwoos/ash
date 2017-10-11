@@ -10,7 +10,7 @@
 
 #include "vector.h"
 
-void flush();
+void flush(void);
 
 void printError(char*, int);
 
@@ -18,9 +18,9 @@ void writeStdout(char*, int);
 
 void writeStderr(char*, int);
 
-char* readStdin();
+char* readStdin(void);
 
-char** generateEmptyStringArr();
+char** generateEmptyStringArr(void);
 
 int countChars(char*);
 

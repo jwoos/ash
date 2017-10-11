@@ -6,7 +6,7 @@ static void increaseCapacity(Vector* vector) {
 	vector -> arr = realloc(vector -> arr, sizeof(void*) * (vector -> capacity));
 }
 
-Vector* vectorInitialize() {
+Vector* vectorInitialize(void) {
 	Vector* vector = malloc(sizeof(Vector));
 
 	vector -> size = 0;
