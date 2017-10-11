@@ -59,6 +59,7 @@ char* readStdin(void) {
 	while (1) {
 		c = getCharFromStdin();
 
+		// ctrl-d
 		if (c == '\0' && position == 0) {
 			_exit(EXIT_SUCCESS);
 		} else if (c == '\n') {

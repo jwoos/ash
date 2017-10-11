@@ -17,16 +17,19 @@ static char** _parseCommand(char* commandLine, int* arraySize) {
 
 	while (commandLine[position] != '\0' && commandLine[position] != '\n') {
 		if (commandLine[position] == ' ') {
-			if (commandLine[position + 1] == ' ' || !commandLine[position]) {
-				break;
+			// we only want to increment arg count when space isn't found in the beginning
+			if (position != 0) {
+				arrayIndex++;
+				buffPosition = 0;
+				bufferSize = 64;
+				args = realloc(args, sizeof(char*) * (arrayIndex + 1));
+				args[arrayIndex] = calloc(bufferSize, sizeof(char));
 			}
 
-			arrayIndex++;
-			buffPosition = 0;
-			bufferSize = 64;
-			args = realloc(args, sizeof(char*) * (arrayIndex + 1));
-			args[arrayIndex] = calloc(bufferSize, sizeof(char));
-			position++;
+			// strip any extra space - we don't care
+			while (commandLine[position] == ' ' && commandLine[position] != '\0' && commandLine[position] != '\n') {
+				position++;
+			}
 			continue;
 		}
 
