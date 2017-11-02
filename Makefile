@@ -6,6 +6,7 @@ LDFLAGS =
 OBJECTS = utils/etc.o utils/io.o utils/string.o \
 		  command/command.o command/line.o command/parse.o \
 		  data/vector.o \
+		  vendor/hash.o \
 		  shell.o
 
 EXECUTABLES = tester ash
