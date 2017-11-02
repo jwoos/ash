@@ -11,8 +11,11 @@
 #include <unistd.h>
 #include <signal.h>
 
-#include "utils.h"
-#include "input.h"
+#include "utils/io.h"
+#include "utils/string.h"
+#include "command/line.h"
+#include "command/command.h"
+#include "command/parse.h"
 
 
 void prompt(void);

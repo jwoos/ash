@@ -3,7 +3,11 @@ CFLAGS = -Wall -Wextra -std=gnu11 -ggdb -O0
 LDLIBS =
 LDFLAGS =
 
-OBJECTS = utils.o shell.o vector.o input.o
+OBJECTS = utils/etc.o utils/io.o utils/string.o \
+		  command/command.o command/line.o command/parse.o \
+		  data/vector.o \
+		  shell.o
+
 EXECUTABLES = tester ash
 
 default: clean ash

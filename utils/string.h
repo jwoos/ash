@@ -1,6 +1,8 @@
-#ifndef ASH_UTILS_H
-#define ASH_UTILS_H
+#ifndef ASH_UTILS_STRING_H
+#define ASH_UTILS_STRING_H
 
+
+#include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,17 +10,8 @@
 
 #include <unistd.h>
 
-#include "vector.h"
+#include "../data/vector.h"
 
-void flush(void);
-
-void printError(char*, int);
-
-void writeStdout(char*, int);
-
-void writeStderr(char*, int);
-
-char* readStdin(void);
 
 char** generateEmptyStringArr(void);
 
@@ -27,5 +20,6 @@ int countChars(char*);
 void freeArray(void**, int);
 
 bool strEqual(char*, char*);
+
 
 #endif
