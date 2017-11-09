@@ -4,7 +4,7 @@
 #include "linked-list.h"
 
 
-List* listConstruct(SingleListNode* node) {
+List* listConstruct(ListNode* node) {
 	List* list = malloc(sizeof(List));
 	if (!list) {
 		return NULL;
@@ -24,10 +24,10 @@ List* listConstruct(SingleListNode* node) {
 }
 
 void listDeconstruct(List* list) {
-	SingleListNode* current = list -> head;
+	ListNode* current = list -> head;
 
 	while (current != list -> tail) {
-		SingleListNode* next = current -> next;
+		ListNode* next = current -> next;
 
 		free(current);
 
@@ -38,8 +38,8 @@ void listDeconstruct(List* list) {
 	list = NULL;
 }
 
-SingleListNode* listNodeInitialize(int data, SingleListNode* next) {
-	SingleListNode* node = malloc(sizeof(SingleListNode));
+ListNode* listNodeInitialize(uint64_t data, ListNode* next) {
+	ListNode* node = malloc(sizeof(ListNode));
 	if (!node) {
 		return NULL;
 	}
@@ -50,12 +50,12 @@ SingleListNode* listNodeInitialize(int data, SingleListNode* next) {
 	return node;
 }
 
-void listNodeDeconstruct(SingleListNode* node) {
+void listNodeDeconstruct(ListNode* node) {
 	free(node);
 }
 
 void listPrint(List* list) {
-	SingleListNode* current = list -> head;
+	ListNode* current = list -> head;
 
 	while (current != NULL) {
 		printf("%d -> ", current -> data);
@@ -65,20 +65,20 @@ void listPrint(List* list) {
 	printf("\n");
 }
 
-void listPush(List* list, int data) {
-	SingleListNode* tail = list -> tail;
+void listPush(List* list, uint64_t data) {
+	ListNode* tail = list -> tail;
 
-	SingleListNode* newElem = listNodeInitialize(data, NULL);
+	ListNode* newElem = listNodeInitialize(data, NULL);
 
 	tail -> next = newElem;
 	list -> tail = newElem;
 	list -> size++;
 }
 
-SingleListNode* listPop(List* list) {
-	SingleListNode* tail = list -> tail;
+ListNode* listPop(List* list) {
+	ListNode* tail = list -> tail;
 
-	SingleListNode* current = list -> head;
+	ListNode* current = list -> head;
 	while (current -> next -> next != NULL) {
 		current = current -> next;
 	}
@@ -90,15 +90,15 @@ SingleListNode* listPop(List* list) {
 	return tail;
 }
 
-SingleListNode* listGetElement(List* list, int index) {
+ListNode* listGetElement(List* list, uint64_t index) {
 	if (index >= list -> size) {
 		printf("Element not found at index %d - outside of range\n", index);
 		return NULL;
 	}
 
-	SingleListNode* node = list -> head;
+	ListNode* node = list -> head;
 
-	int i = 0;
+	uint64_t i = 0;
 	while (i < index) {
 		if (node != NULL) {
 			i++;
@@ -112,8 +112,8 @@ SingleListNode* listGetElement(List* list, int index) {
 	return node;
 }
 
-void listSetElement(List* list, int index, int newData) {
-	SingleListNode* atIndex = listGetElement(list, index);
+void listSetElement(List* list, uint64_t index, uint64_t newData) {
+	ListNode* atIndex = listGetElement(list, index);
 
 	if (atIndex == NULL) {
 		printf("Not setting - aborting...\n");
@@ -123,18 +123,18 @@ void listSetElement(List* list, int index, int newData) {
 	atIndex -> data = newData;
 }
 
-void listInsert(List* list, int index, int newData) {
-	SingleListNode* atIndex = listGetElement(list, index - 1);
+void listInsert(List* list, uint64_t index, uint64_t newData) {
+	ListNode* atIndex = listGetElement(list, index - 1);
 
-	SingleListNode* newNode = listNodeInitialize(newData, atIndex -> next);
+	ListNode* newNode = listNodeInitialize(newData, atIndex -> next);
 	atIndex -> next = newNode;
 
 	list -> size++;
 }
 
-void listDelete(List* list, int index) {
-	SingleListNode* prevIndex = listGetElement(list, index - 1);
-	SingleListNode* temp = prevIndex -> next;
+void listDelete(List* list, uint64_t index) {
+	ListNode* prevIndex = listGetElement(list, index - 1);
+	ListNode* temp = prevIndex -> next;
 
 	prevIndex -> next = prevIndex -> next -> next;
 
@@ -143,17 +143,17 @@ void listDelete(List* list, int index) {
 }
 
 void listClear(List* list) {
-	SingleListNode* current = list -> head;
-	SingleListNode* tempHolder[list -> size];
+	ListNode* current = list -> head;
+	ListNode* tempHolder[list -> size];
 
-	int i = 0;
+	uint64_t i = 0;
 	while (current != NULL) {
 		tempHolder[i] = current;
 		current = current -> next;
 		i++;
 	}
 
-	for (int i = 0; i < list -> size; i++) {
+	for (uint64_t i = 0; i < list -> size; i++) {
 		free(tempHolder[i]);
 	}
 

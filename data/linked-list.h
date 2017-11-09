@@ -1,47 +1,41 @@
 #ifndef SINGLE_LINKED_LIST_H
 #define SINGLE_LINKED_LIST_H
 
-/*
- * the ListNode is the actual list, I opted to wrap it in another struct
- * to avoid having to put the head/tail on each ListNode as that would be
- * highly inefficient. Also this way, other properties of the list as
- * a WHOLE can be recorded e.g. size
- */
 
-// this should still be available
 typedef struct ListNode {
-	int data;
+	uint64_t data;
 	struct ListNode* next;
+	struct ListNode* previous;
 } ListNode;
 
 // ListNode wrapper
 typedef struct List {
 	ListNode* head;
 	ListNode* tail;
-	int size;
+	uint64_t size;
 } List;
 
 List* listConstruct(ListNode*);
 
 void listDeconstruct(List*);
 
-ListNode* listNodeInitialize(int, ListNode*);
+ListNode* listNodeInitialize(uint64_t, ListNode*);
 
 void listNodeDeconstruct(ListNode*);
 
 void listPrint(List*);
 
-void listPush(List*, int);
+void listPush(List*, uint64_t);
 
 ListNode* listPop(List*);
 
-ListNode* listGetElement(List*, int);
+ListNode* listGetElement(List*, uint64_t);
 
-void listSetElement(List*, int, int);
+void listSetElement(List*, uint64_t, uint64_t);
 
-void listInsert(List*, int, int);
+void listInsert(List*, uint64_t, uint64_t);
 
-void listDelete(List*, int);
+void listDelete(List*, uint64_t);
 
 void listClear(List*);
 

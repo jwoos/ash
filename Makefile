@@ -3,9 +3,10 @@ CFLAGS = -Wall -Wextra -std=gnu11 -ggdb -O0
 LDLIBS =
 LDFLAGS =
 
-OBJECTS = utils/etc.o utils/io.o utils/string.o \
+# data/vector.o data/linked-list.o data/hash-table.o
+OBJECTS = utils/etc.o utils/io.o utils/string.o utils/math.o \
 		  command/command.o command/line.o command/parse.o \
-		  data/vector.o \
+		  data/vector.o data/linked-list.o \
 		  vendor/hash.o \
 		  shell.o
 
@@ -25,16 +26,16 @@ debug-gdb: default
 # $(CC) $(CPPFLAGS) $(CFLAGS) -c $@
 
 # shell main
-ash: ${OBJECTS}
+ash: $(OBJECTS)
 	$(CC) main.c $^ $(LDFLAGS) $(LDLIBS) -o $@
 
 # separate compilation point for testing reasons
-tester: tester.c ${OBJECTS}
+tester: tester.c $(OBJECTS)
 
 clean-objects:
-	touch ${OBJECTS} && rm ${OBJECTS}
+	touch $(OBJECTS) && rm $(OBJECTS)
 
 clean-executables:
-	touch ${EXECUTABLES} && rm ${EXECUTABLES}
+	touch $(EXECUTABLES) && rm $(EXECUTABLES)
 
 clean: clean-objects clean-executables
