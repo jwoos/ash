@@ -1,14 +1,14 @@
 #include "shell.h"
 
-void prompt() {
+void prompt(void) {
 	writeStdout("shell > ", 9);
 }
 
-void notAvailable() {
+void notAvailable(void) {
 	writeStdout("Not supported yet\n", 18);
 }
 
-int builtIns(char* command, char* arg) {
+uint32_t builtIns(char* command, char* arg) {
 	char* pwd = "pwd";
 	char* cd = "cd";
 	char* quit = "exit";
@@ -48,86 +48,4 @@ int builtIns(char* command, char* arg) {
 	}
 
 	return matched;
-}
-
-char* getCommand(char* commandLine) {
-	char* buffer = malloc(sizeof(char) * 64);
-
-	int position = 0;
-
-	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
-		buffer[position] = commandLine[position];
-		position++;
-	}
-	buffer[position] = '\0';
-
-	return buffer;
-}
-
-char** getArg(char* commandLine) {
-	char** args = malloc(sizeof(char*));
-	args[0] = malloc(sizeof(char) * 64);
-	char* buffer = args[0];
-
-	int position = 0;
-
-	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
-		position++;
-	}
-	position++;
-
-	int buffPosition = 0;
-
-	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
-		buffer[buffPosition] = commandLine[position];
-		buffPosition++;
-		position++;
-	}
-	buffer[buffPosition] = '\0';
-
-	return args;
-}
-
-char** parseCommand(char* commandLine, int* arraySize) {
-	// args will contain the actual command and the following arguments
-	char** args = malloc(sizeof(char*));
-	args[0] = calloc(64, sizeof(char));
-
-	int bufferSize = 64;
-	int arrayIndex = 0;
-	int buffPosition = 0;
-	int position = 0;
-
-	while (commandLine[position] != '\0' && commandLine[position] != '\n') {
-		if (commandLine[position] == ' ') {
-			if (commandLine[position + 1] == ' ' || !commandLine[position]) {
-				break;
-			}
-
-			arrayIndex++;
-			buffPosition = 0;
-			bufferSize = 64;
-			args = realloc(args, sizeof(char*) * (arrayIndex + 1));
-			args[arrayIndex] = calloc(bufferSize, sizeof(char));
-			position++;
-			continue;
-		}
-
-		if (buffPosition == bufferSize) {
-			bufferSize *= 2;
-			args[arrayIndex] = realloc(args[arrayIndex], sizeof(char) * bufferSize);
-		}
-
-		args[arrayIndex][buffPosition] = commandLine[position];
-
-		position++;
-		buffPosition++;
-	}
-
-	arrayIndex++;
-	args = realloc(args, sizeof(char*) * (arrayIndex + 1));
-	args[arrayIndex] = NULL;
-
-	*arraySize = arrayIndex + 1;
-	return args;
 }

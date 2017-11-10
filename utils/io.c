@@ -1,8 +1,6 @@
-#include <errno.h>
+#include "io.h"
 
-#include "utils.h"
-
-static char getCharFromStdin() {
+static char getCharFromStdin(void) {
 	char buffer[1];
 
 	int bytesRead = read(STDIN_FILENO, buffer, 1);
@@ -20,7 +18,7 @@ static char getCharFromStdin() {
 	return *buffer;
 }
 
-void flush() {
+void flush(void) {
 	writeStdout("\n", 1);
 }
 
@@ -45,7 +43,7 @@ void writeStderr(char* message, int bytes) {
 	}
 }
 
-char* readStdin() {
+char* readStdin(void) {
 	unsigned int original = 256;
 	unsigned int size = 256;
 	unsigned int position = 0;
@@ -59,6 +57,7 @@ char* readStdin() {
 	while (1) {
 		c = getCharFromStdin();
 
+		// ctrl-d
 		if (c == '\0' && position == 0) {
 			_exit(EXIT_SUCCESS);
 		} else if (c == '\n') {
@@ -79,48 +78,4 @@ char* readStdin() {
 	}
 
 	return buffer;
-}
-
-char** generateEmptyStringArr() {
-	char** buffArr = malloc(sizeof(char*));
-	buffArr[0] = malloc(sizeof(char));
-	buffArr[0][0] = '\0';
-
-	return buffArr;
-}
-
-// not binary safe
-int countChars(char* buf) {
-	int index = 0;
-
-	do {
-		index++;
-	} while (buf[index] != '\0');
-
-	return index;
-}
-
-void freeArray(void** arr, int size) {
-	for (int i = 0; i < size; i++) {
-		free(arr[i]);
-	}
-
-	free(arr);
-}
-
-bool strEqual(char* a, char* b) {
-	int aLength = strlen(a);
-	int bLength = strlen(b);
-
-	if (aLength != bLength) {
-		return false;
-	}
-
-	for (int i = 0; i < aLength; i++) {
-		if (a[i] != b[i]) {
-			return false;
-		}
-	}
-
-	return true;
 }

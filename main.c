@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #include <sys/wait.h>
 #include <unistd.h>
@@ -30,7 +31,7 @@ void sigactionHandler(int sig) {
 	}
 }
 
-void handleSignals() {
+void handleSignals(void) {
 	struct sigaction act;
 	act.sa_handler = &sigactionHandler;
 	// don't reset the handler
@@ -44,22 +45,22 @@ void handleSignals() {
 int main(int argc, char* argv[]) {
 	handleSignals();
 
+	Command* cmd;
+	char* commandLine;
 	while (1) {
 		prompt();
 
-		int arraySize = 0;
-		char* commandLine = readStdin();
-		char** parsedCommand = parseCommand(commandLine, &arraySize);
+		commandLine = readStdin();
+		cmd = parseCommand(commandLine);
 
-		int cont = builtIns(parsedCommand[0], parsedCommand[1]);
-
-		if (!cont && parsedCommand[0][0] != '\0') {
+		uint32_t cont = builtIns(cmd -> cmd, cmd -> args[0]);
+		if (!cont && cmd -> cmd[0] != '\0') {
 			int status;
 
 			PID = fork();
 
 			if (PID == 0) {
-				if (execvp(parsedCommand[0], parsedCommand) == -1) {
+				if (execvp(cmd -> cmd, cmd -> raw) == -1) {
 					printError("Command failure", 1);
 				}
 			} else if (PID < 0) {
@@ -70,9 +71,9 @@ int main(int argc, char* argv[]) {
 			}
 		}
 
-		free(commandLine);
-		freeArray((void**)parsedCommand, arraySize);
+		commandDeconstruct(cmd);
 	}
 
-	_exit(EXIT_SUCCESS);
+	/*_exit(EXIT_SUCCESS);*/
+	return 0;
 }
