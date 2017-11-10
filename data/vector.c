@@ -10,17 +10,18 @@ Vector* vectorConstruct(uint64_t cap) {
 
 	vector -> size = 0;
 	vector -> capacity = cap;
-	vector -> arr = malloc(sizeof (void*) * (vector -> capacity));
+	vector -> array = malloc(sizeof (void*) * cap);
 
 	return vector;
 }
 
 void vectorDeconstruct(Vector* vector) {
-	for (uint64_t i = 0; i < vector -> size - 1; i++) {
-		free(vector -> arr[i]);
+	for (uint64_t i = 0; i < vector -> size; i++) {
+		free(vector -> array[i]);
+		vector -> array[i] = NULL;
 	}
 
-	free(vector -> arr);
+	free(vector -> array);
 	free(vector);
 }
 
@@ -29,25 +30,25 @@ void vectorPush(Vector* vector, void* data) {
 		vectorResize(vector, MULTIPLY, ASH_DATA_INCREASE_FACTOR);
 	}
 
-	vector -> arr[vector -> size] = data;
+	vector -> array[vector -> size] = data;
 	vector -> size++;
 }
 
 void* vectorPop(Vector* vector) {
 	vector -> size--;
 
-	void* data = vector -> arr[vector -> size - 1];
-	vector -> arr[vector -> size] = NULL;
+	void* data = vector -> array[vector -> size - 1];
+	vector -> array[vector -> size] = NULL;
 
 	return data;
 }
 
 void* vectorGet(const Vector* vector, uint64_t index) {
-	return vector -> arr[index];
+	return vector -> array[index];
 }
 
 void vectorSet(Vector* vector, uint64_t index, void* data) {
-	vector -> arr[index] = data;
+	vector -> array[index] = data;
 }
 
 void vectorInsert(Vector* vector, uint64_t index, void* data) {
@@ -57,49 +58,47 @@ void vectorInsert(Vector* vector, uint64_t index, void* data) {
 
 	vector -> size++;
 
-	for (uint64_t i = vector -> size - 1; i > index; i--) {
-		vector -> arr[i] = vectorGet(vector, i - 1);
-	}
+	memmove(vector -> array + (index + 1), vector -> array + index, sizeof (void*) * (vector -> size - (index + 1)));
 
 	vectorSet(vector, index, data);
 }
 
 void vectorDelete(Vector* vector, uint64_t index) {
-	for (uint64_t i = index; i < vector -> size - 1; i++) {
-		vector -> arr[i] = vectorGet(vector, i + 1);
-	}
+	free(vector -> array[index]);
+	memmove(vector -> array + index, vector -> array + (index + 1), sizeof (void*) * (vector -> size - (index + 1)));
 
 	vector -> size--;
 }
 
 void vectorClear(Vector* vector) {
 	for (uint64_t i = 0; i < vector -> size - 1; i++) {
-		free(vector -> arr[i]);
+		free(vector -> array[i]);
+		vector -> array[i] = NULL;
 	}
-	vector -> arr = realloc(sizeof (void*), ASH_DATA_DEFAULT_SIZE);
+	vector -> array = realloc(sizeof (void*), ASH_DATA_DEFAULT_SIZE);
 	vector -> size = 0;
 	vector -> capacity = ASH_DATA_DEFAULT_SIZE;
 }
 
 void vectorResize(Vector* vector, enum Resize action, uint64_t amount) {
-	uint64_t currentSize = vector -> size;
+	uint64_t currentCapacity = vector -> capacity;
 	uint64_t proposedSize;
 
 	switch (action) {
 		case ADD:
-			proposedSize = currentSize + amount;
+			proposedSize = currentCapacity + amount;
 			break;
 
 		case MULTIPLY:
-			proposedSize = currentSize * amount;
+			proposedSize = currentCapacity * amount;
 			break;
 
 		case SUBTRACT:
-			proposedSize = max(currentSize - amount, 0);
+			proposedSize = max(currentCapacity - amount, 0);
 			break;
 
 		case DIVIDE:
-			proposedSize = currentSize / amount;
+			proposedSize = currentCapacity / amount;
 			break;
 
 		case SET:
@@ -109,5 +108,5 @@ void vectorResize(Vector* vector, enum Resize action, uint64_t amount) {
 
 	vector -> capacity = proposedSize;
 	vector -> size = min(vector -> capacity, vector -> size);
-	vector -> arr = realloc(vector -> arr, sizeof (*(vector -> arr)) * (vector -> capacity));
+	vector -> array = realloc(vector -> array, sizeof (*(vector -> array)) * (vector -> capacity));
 }

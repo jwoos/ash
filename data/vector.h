@@ -2,6 +2,7 @@
 #define ASH_VECTOR_H
 
 
+#include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -14,7 +15,7 @@ typedef struct Vector {
 	uint64_t size;
 	uint64_t capacity;
 
-	void** arr;
+	void** array;
 } Vector;
 
 
