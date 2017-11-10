@@ -75,9 +75,7 @@ void vectorClear(Vector* vector) {
 		free(vector -> array[i]);
 		vector -> array[i] = NULL;
 	}
-	vector -> array = realloc(sizeof (void*), ASH_DATA_DEFAULT_SIZE);
 	vector -> size = 0;
-	vector -> capacity = ASH_DATA_DEFAULT_SIZE;
 }
 
 void vectorResize(Vector* vector, enum Resize action, uint64_t amount) {

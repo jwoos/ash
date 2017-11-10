@@ -3,9 +3,9 @@
 
 
 typedef struct ListNode {
-	uint64_t data;
 	struct ListNode* next;
 	struct ListNode* previous;
+	void* data;
 } ListNode;
 
 // ListNode wrapper
@@ -15,28 +15,32 @@ typedef struct List {
 	uint64_t size;
 } List;
 
+
 List* listConstruct(ListNode*);
 
 void listDeconstruct(List*);
 
-ListNode* listNodeInitialize(uint64_t, ListNode*);
+ListNode* listNodeConstruct(void*, ListNode*, ListNode*);
 
 void listNodeDeconstruct(ListNode*);
 
-void listPrint(List*);
+void listPushL(List*, void*);
 
-void listPush(List*, uint64_t);
+void listPushR(List*, void*);
 
-ListNode* listPop(List*);
+void* listPopL(List*);
 
-ListNode* listGetElement(List*, uint64_t);
+void* listPopR(List*);
 
-void listSetElement(List*, uint64_t, uint64_t);
+void* listGet(List*, uint64_t);
 
-void listInsert(List*, uint64_t, uint64_t);
+void listSet(List*, uint64_t, void*);
+
+void listInsert(List*, uint64_t, void*);
 
 void listDelete(List*, uint64_t);
 
 void listClear(List*);
+
 
 #endif
