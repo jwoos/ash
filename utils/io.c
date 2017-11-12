@@ -44,10 +44,10 @@ void writeStderr(char* message, int bytes) {
 }
 
 char* readStdin(void) {
-	unsigned int original = 256;
-	unsigned int size = 256;
-	unsigned int position = 0;
-	char* buffer = calloc(size, sizeof(char));
+	uint32_t original = 256;
+	uint32_t size = 256;
+	uint32_t position = 0;
+	char* buffer = calloc(size, sizeof(*buffer));
 	char c;
 
 	if (!buffer) {

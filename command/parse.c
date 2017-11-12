@@ -1,40 +1,56 @@
 #include "parse.h"
 
 
-char* getCommand(char* commandLine) {
-	char* buffer = malloc(sizeof(char) * 64);
+CommandLine* parseCommand(char* raw) {
+	Vector* commands = vectorConstruct(2);
 
-	int position = 0;
+	// parse stuff
+	uint64_t bufferSize = ASH_BUFFER_SIZE;
+	uint64_t bufferIndex = 0;
+	uint64_t index = 0;
 
-	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
-		buffer[position] = commandLine[position];
-		position++;
+	char* buffer = malloc(sizeof (*buffer) * bufferSize);
+	Vector* args = vectorConstruct(2);
+
+	bool baseFound = false;
+
+	while (raw[index] != '\0' && raw[index] != '\n') {
+		if (raw[index] == ' ') {
+			// push on the next space delimited string
+			if (index != 0) {
+				buffer[bufferIndex] = '\0';
+
+				vectorPush(args, buffer);
+
+				bufferSize = ASH_BUFFER_SIZE;
+				bufferIndex = 0;
+				buffer = malloc(sizeof (*buffer) * bufferSize);
+			}
+
+			// strip all whitespace
+			while (raw[index] == ' ' && raw[index] != '\0' && raw[index] != '\n') {
+				index++;
+			}
+		}
+
+		if (bufferIndex == bufferSize) {
+			bufferSize *= ASH_INCREASE_FACTOR;
+			buffer = realloc(buffer, sizeof (*buffer) * bufferSize);
+		}
+
+		buffer[bufferIndex] = raw[index];
+
+		index++;
+		bufferIndex++;
 	}
-	buffer[position] = '\0';
 
-	return buffer;
+	vectorPush(args, buffer);
+	vectorPush(args, NULL);
+	vectorPush(commands, commandConstruct(vectorGet(args, 0), args));
+
+	return commandLineConstruct(raw, commands);
 }
 
-char** getArg(char* commandLine) {
-	char** args = malloc(sizeof(char*));
-	args[0] = malloc(sizeof(char) * 64);
-	char* buffer = args[0];
-
-	int position = 0;
-
-	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
-		position++;
-	}
-	position++;
-
-	int buffPosition = 0;
-
-	while (commandLine[position] != ' ' && commandLine[position] != '\0') {
-		buffer[buffPosition] = commandLine[position];
-		buffPosition++;
-		position++;
-	}
-	buffer[buffPosition] = '\0';
-
-	return args;
+void cleanUpCommand(CommandLine* cl) {
+	commandLineDeconstruct(cl, NULL);
 }

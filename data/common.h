@@ -2,10 +2,6 @@
 #define ASH_DATA_COMMON
 
 
-#define ASH_DATA_DEFAULT_SIZE 10
-#define ASH_DATA_INCREASE_FACTOR 2
-
-
 enum Resize {
 	ADD,
 	MULTIPLY,

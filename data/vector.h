@@ -7,8 +7,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#include "../common.h"
 #include "../utils/math.h"
-
 #include "common.h"
 
 

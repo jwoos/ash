@@ -7,18 +7,21 @@
 #include <stdlib.h>
 
 #include "command.h"
+#include "../common.h"
+#include "../data/vector.h"
 #include "../utils/io.h"
 #include "../utils/string.h"
 
 
 typedef struct commandLine {
-	char** raw;            // raw text
-	uint16_t rawSize;      // size of raw
-	Command** commands;    // array of all the commands
-	uint16_t commandsSize; // size of commands
+	char* raw;             // raw text
+	Vector* commands;    // array of all the commands
 } CommandLine;
 
-CommandLine* commandLineConstruct(char* commandLine, int arraySize);
+
+CommandLine* commandLineConstruct(char*, Vector*);
+
+void commandLineDeconstruct(CommandLine*, void (*fn)(void*));
 
 
 #endif

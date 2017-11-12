@@ -27,7 +27,7 @@ debug-gdb: default
 
 # shell main
 ash: $(OBJECTS)
-	$(CC) main.c $^ $(LDFLAGS) $(LDLIBS) -o $@
+	$(CC) $(CFLAGS) main.c $^ $(LDFLAGS) $(LDLIBS) -o $@
 
 # separate compilation point for testing reasons
 tester: tester.c $(OBJECTS)
