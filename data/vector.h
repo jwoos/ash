@@ -2,6 +2,7 @@
 #define ASH_VECTOR_H
 
 
+#include <stdint.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -21,7 +22,7 @@ typedef struct Vector {
 
 Vector* vectorConstruct(uint64_t);
 
-void vectorDeconstruct(Vector* vector);
+void vectorDeconstruct(Vector* vector, void (*fn)(void*));
 
 void vectorPush(Vector*, void*);
 
@@ -33,9 +34,9 @@ void vectorSet(Vector*, uint64_t, void*);
 
 void vectorInsert(Vector*, uint64_t, void*);
 
-void vectorDelete(Vector*, uint64_t);
+void vectorDelete(Vector*, uint64_t, void (*fn)(void*));
 
-void vectorClear(Vector*);
+void vectorClear(Vector*, void (*fn)(void*));
 
 void vectorResize(Vector*, enum Resize, uint64_t);
 

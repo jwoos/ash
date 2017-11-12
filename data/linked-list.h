@@ -2,6 +2,10 @@
 #define SINGLE_LINKED_LIST_H
 
 
+#include <stdlib.h>
+#include <stdint.h>
+
+
 typedef struct ListNode {
 	struct ListNode* next;
 	struct ListNode* previous;

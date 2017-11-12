@@ -118,7 +118,7 @@ void* listGet(List* list, uint64_t index) {
 	return data;
 }
 
-void listSet(List* list, uint64_t index, uint64_t newData) {
+void listSet(List* list, uint64_t index, void* newData) {
 	ListNode* atIndex = listGet(list, index);
 
 	if (atIndex == NULL) {
@@ -129,7 +129,7 @@ void listSet(List* list, uint64_t index, uint64_t newData) {
 	atIndex -> data = newData;
 }
 
-void listInsert(List* list, uint64_t index, uint64_t newData) {
+void listInsert(List* list, uint64_t index, void* newData) {
 	ListNode* atIndex = listGet(list, index - 1);
 
 	ListNode* newNode = listNodeConstruct(newData, atIndex -> next);
