@@ -44,7 +44,10 @@ CommandLine* parseCommand(char* raw) {
 		bufferIndex++;
 	}
 
-	vectorPush(args, buffer);
+	if (buffer[0] != '\0') {
+		vectorPush(args, buffer);
+	}
+
 	vectorPush(args, NULL);
 	vectorPush(commands, commandConstruct(vectorGet(args, 0), args));
 
