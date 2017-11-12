@@ -11,11 +11,34 @@ CommandLine* parseCommand(char* raw) {
 
 	char* buffer = malloc(sizeof (*buffer) * bufferSize);
 	Vector* args = vectorConstruct(2);
+	char quotation = '\0';
 
 	bool baseFound = false;
 
 	while (raw[index] != '\0' && raw[index] != '\n') {
-		if (raw[index] == ' ') {
+		// deal with quotations
+		if (raw[index] == '\'' || raw[index] == '"') {
+			if (quotation == '\0') {
+				// beginning
+				quotation = raw[index];
+
+				index += 1;
+				continue;
+			} else if (quotation == raw[index]) {
+				// end
+				buffer[bufferIndex] = '\0';
+				vectorPush(args, buffer);
+				bufferSize = ASH_BUFFER_SIZE;
+				bufferIndex = 0;
+				buffer = malloc(sizeof (*buffer) * bufferSize);
+				quotation = '\0';
+
+				index += 1;
+				continue;
+			}
+		}
+
+		if (quotation == '\0' && raw[index] == ' ') {
 			// push on the next space delimited string
 			if (index != 0) {
 				buffer[bufferIndex] = '\0';
@@ -31,6 +54,7 @@ CommandLine* parseCommand(char* raw) {
 			while (raw[index] == ' ' && raw[index] != '\0' && raw[index] != '\n') {
 				index++;
 			}
+			continue;
 		}
 
 		if (bufferIndex == bufferSize) {
@@ -42,6 +66,10 @@ CommandLine* parseCommand(char* raw) {
 
 		index++;
 		bufferIndex++;
+	}
+
+	if (quotation != '\0') {
+		// error clean up
 	}
 
 	if (buffer[0] != '\0') {
