@@ -5,7 +5,8 @@
 
 
 List* listConstruct(ListNode* node) {
-	List* list = malloc(sizeof(List));
+	List* list = malloc(sizeof (List));
+
 	if (!list) {
 		return NULL;
 	}
@@ -15,6 +16,8 @@ List* listConstruct(ListNode* node) {
 		list -> tail = NULL;
 		list -> size = 0;
 	} else {
+		node -> next = NULL;
+		node -> previous = NULL;
 		list -> head = node;
 		list -> tail = node;
 		list -> size = 1;
@@ -29,91 +32,94 @@ void listDeconstruct(List* list) {
 	while (current != list -> tail) {
 		ListNode* next = current -> next;
 
-		free(current);
+		listNodeDeconstruct(current);
 
 		current = next;
 	}
 
 	free(list);
-	list = NULL;
 }
 
-ListNode* listNodeInitialize(uint64_t data, ListNode* next) {
-	ListNode* node = malloc(sizeof(ListNode));
+ListNode* listNodeConstruct(void* data, ListNode* prev, ListNode* next) {
+	ListNode* node = malloc(sizeof (ListNode));
+
 	if (!node) {
 		return NULL;
 	}
 
 	node -> data = data;
 	node -> next = next ? next : NULL;
+	node -> previous = prev ? prev : NULL;
 
 	return node;
 }
 
 void listNodeDeconstruct(ListNode* node) {
+	free(node -> data);
 	free(node);
 }
 
-void listPrint(List* list) {
-	ListNode* current = list -> head;
-
-	while (current != NULL) {
-		printf("%d -> ", current -> data);
-		current = current -> next;
-	}
-
-	printf("\n");
-}
-
-void listPush(List* list, uint64_t data) {
+void listPush(List* list, void* data) {
 	ListNode* tail = list -> tail;
 
-	ListNode* newElem = listNodeInitialize(data, NULL);
-
+	ListNode* newElem = listNodeConstruct(data, tail, NULL);
 	tail -> next = newElem;
+
 	list -> tail = newElem;
 	list -> size++;
 }
 
-ListNode* listPop(List* list) {
+void* listPop(List* list) {
 	ListNode* tail = list -> tail;
+	ListNode* previous = tail -> previous;
 
-	ListNode* current = list -> head;
-	while (current -> next -> next != NULL) {
-		current = current -> next;
-	}
-
-	current -> next = NULL;
-	list -> tail = current;
+	previous -> next = NULL;
+	list -> tail = previous;
 	list -> size--;
 
-	return tail;
+	void* data = tail -> data;
+	free(tail);
+
+	return data;
 }
 
-ListNode* listGetElement(List* list, uint64_t index) {
+void* listGet(List* list, uint64_t index) {
 	if (index >= list -> size) {
-		printf("Element not found at index %d - outside of range\n", index);
 		return NULL;
 	}
 
-	ListNode* node = list -> head;
+	ListNode* node;
+	uint64_t i;
+	if (index <= list -> size / 2) {
+		node = list -> head;
+		i = 0;
 
-	uint64_t i = 0;
-	while (i < index) {
-		if (node != NULL) {
-			i++;
-			node = node -> next;
-		} else {
-			printf("Element not found at index %d outside of range\n", index);
-			return NULL;
+		while (i < index) {
+			if (node != NULL) {
+				i++;
+				node = node -> next;
+			}
+		}
+	} else {
+		node = list -> tail;
+		i = list -> size - 1;
+
+		while (i > index) {
+			if (node != NULL) {
+				i--;
+				node = node -> previous;
+			}
 		}
 	}
 
-	return node;
+	void* data = node -> data;
+	free(data);
+
+	return data;
 }
 
-void listSetElement(List* list, uint64_t index, uint64_t newData) {
-	ListNode* atIndex = listGetElement(list, index);
+void listSet(List* list, uint64_t index, void* newData) {
+	ListNode* atIndex = listGet(list, index);
 
 	if (atIndex == NULL) {
 		printf("Not setting - aborting...\n");
@@ -123,17 +129,17 @@ void listSetElement(List* list, uint64_t index, uint64_t newData) {
 	atIndex -> data = newData;
 }
 
-void listInsert(List* list, uint64_t index, uint64_t newData) {
-	ListNode* atIndex = listGetElement(list, index - 1);
+void listInsert(List* list, uint64_t index, void* newData) {
+	ListNode* atIndex = listGet(list, index - 1);
 
-	ListNode* newNode = listNodeInitialize(newData, atIndex -> next);
+	ListNode* newNode = listNodeConstruct(newData, atIndex -> next);
 	atIndex -> next = newNode;
 
 	list -> size++;
 }
 
 void listDelete(List* list, uint64_t index) {
-	ListNode* prevIndex = listGetElement(list, index - 1);
+	ListNode* prevIndex = listGet(list, index - 1);
 	ListNode* temp = prevIndex -> next;
 
 	prevIndex -> next = prevIndex -> next -> next;

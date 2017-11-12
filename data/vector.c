@@ -15,9 +15,13 @@ Vector* vectorConstruct(uint64_t cap) {
 	return vector;
 }
 
-void vectorDeconstruct(Vector* vector) {
+void vectorDeconstruct(Vector* vector, void (*fn)(void*)) {
+	if (fn == NULL) {
+		fn = &free;
+	}
+
 	for (uint64_t i = 0; i < vector -> size; i++) {
-		free(vector -> array[i]);
+		(*fn)(vector -> array[i]);
 		vector -> array[i] = NULL;
 	}
 
@@ -63,23 +67,30 @@ void vectorInsert(Vector* vector, uint64_t index, void* data) {
 	vectorSet(vector, index, data);
 }
 
-void vectorDelete(Vector* vector, uint64_t index) {
-	free(vector -> array[index]);
+void vectorDelete(Vector* vector, uint64_t index, void (*fn)(void*)) {
+	if (fn == NULL) {
+		fn = &free;
+	}
+
+	(*fn)(vector -> array[index]);
 	memmove(vector -> array + index, vector -> array + (index + 1), sizeof (void*) * (vector -> size - (index + 1)));
 
 	vector -> size--;
 }
 
-void vectorClear(Vector* vector) {
+void vectorClear(Vector* vector, void (*fn)(void*)) {
+	if (fn == NULL) {
+		fn = &free;
+	}
+
 	for (uint64_t i = 0; i < vector -> size - 1; i++) {
-		free(vector -> array[i]);
+		(*fn)(vector -> array[i]);
 		vector -> array[i] = NULL;
 	}
-	vector -> array = realloc(sizeof (void*), ASH_DATA_DEFAULT_SIZE);
 	vector -> size = 0;
-	vector -> capacity = ASH_DATA_DEFAULT_SIZE;
 }
 
+// FIXME free memory for size reductions
 void vectorResize(Vector* vector, enum Resize action, uint64_t amount) {
 	uint64_t currentCapacity = vector -> capacity;
 	uint64_t proposedSize;

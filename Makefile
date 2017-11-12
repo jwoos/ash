@@ -6,7 +6,7 @@ LDFLAGS =
 # data/vector.o data/linked-list.o data/hash-table.o
 OBJECTS = utils/etc.o utils/io.o utils/string.o utils/math.o \
 		  command/command.o command/line.o command/parse.o \
-		  data/vector.o data/linked-list.o \
+		  data/vector.o \
 		  vendor/hash.o \
 		  shell.o
 

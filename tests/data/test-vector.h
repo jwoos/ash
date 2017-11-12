@@ -5,7 +5,7 @@ static int size = 100;
 
 void testVectorBasic() {
 	Vector* vec = vectorConstruct(size);
-	vectorDeconstruct(vec);
+	vectorDeconstruct(vec, NULL);
 }
 
 void testVectorAutoResize() {
@@ -23,7 +23,7 @@ void testVectorAutoResize() {
 	assert(vec -> size == 100);
 	assert(vec -> capacity == 128);
 
-	vectorDeconstruct(vec);
+	vectorDeconstruct(vec, NULL);
 }
 
 void testVectorResize() {
@@ -36,7 +36,7 @@ void testVectorResize() {
 	assert(vec -> capacity == size * 2);
 	vectorResize(vec, DIVIDE, 2);
 	assert(vec -> capacity == size);
-	vectorDeconstruct(vec);
+	vectorDeconstruct(vec, NULL);
 }
 
 void testVectorInsertDelete() {
@@ -55,6 +55,6 @@ void testVectorInsertDelete() {
 	assert(vectorGet(vec, 0) == x);
 	assert(vec -> capacity == size);
 
-	vectorDelete(vec, 0);
-	vectorDeconstruct(vec);
+	vectorDelete(vec, 0, NULL);
+	vectorDeconstruct(vec, NULL);
 }
