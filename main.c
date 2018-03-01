@@ -15,6 +15,7 @@ void sigactionHandler(int sig) {
 		case SIGINT: {
 			if (PID > 0) {
 				kill(PID, SIGINT);
+				wait(NULL);
 				PID = 0;
 				flush();
 			} else {
