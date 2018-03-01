@@ -11,22 +11,16 @@
 
 
 typedef struct command {
-	char** raw;        // raw command text
-	uint16_t rawSize;  // size of raw
 	char* cmd;         // base command
-	char** args;       // array of arguments
-	uint16_t argsSize; // size of arguments
-	uint8_t index;     // index relative to CommandLine
+	Vector* args;      // arguments
 	bool pipe;         // should it pipe to next?
 	bool redirect;     // should it redirect?
 } Command;
 
 
-Command* commandConstruct(char**, int);
+Command* commandConstruct(char*, Vector*);
 
-void commandDeconstruct(Command*);
-
-Command* parseCommand(char*);
+void commandDeconstruct(Command*, void (*fn)(void*));
 
 
 #endif

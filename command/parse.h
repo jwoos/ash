@@ -6,13 +6,15 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include "../common.h"
 #include "../utils/io.h"
 #include "../utils/string.h"
+#include "line.h"
 
 
-char* getCommand(char*);
+CommandLine* parseCommand(char*);
 
-char** getArg(char*);
+void cleanUpCommand(CommandLine*);
 
 
 #endif

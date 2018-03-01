@@ -1,5 +1,6 @@
 #include "shell.h"
 
+
 void prompt(void) {
 	writeStdout("shell > ", 9);
 }

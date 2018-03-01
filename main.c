@@ -45,33 +45,44 @@ void handleSignals(void) {
 int main(int argc, char* argv[]) {
 	handleSignals();
 
-	Command* cmd;
-	char* commandLine;
+	CommandLine* cl;
+	char* input;
 	while (1) {
 		prompt();
 
-		commandLine = readStdin();
-		cmd = parseCommand(commandLine);
+		input = readStdin();
+		cl = parseCommand(input);
+		Vector* commands = cl -> commands;
 
-		uint32_t cont = builtIns(cmd -> cmd, cmd -> args[0]);
-		if (!cont && cmd -> cmd[0] != '\0') {
-			int status;
+		for (uint32_t i = 0; i < commands -> size; i++) {
+			Command* cmd = vectorGet(commands, i);
+			char* base = cmd -> cmd;
+			Vector* args = cmd -> args;
 
-			PID = fork();
+			uint32_t cont = builtIns(base, vectorGet(args, 1));
 
-			if (PID == 0) {
-				if (execvp(cmd -> cmd, cmd -> raw) == -1) {
-					printError("Command failure", 1);
+			if (!cont && base[0] != '\0') {
+				int status;
+
+				PID = fork();
+
+				if (PID < 0) {
+					printError("Error forking process", 0);
 				}
-			} else if (PID < 0) {
-				printError("Error forking process", 0);
-			} else {
-				// wait for child process to terminate
-				wait(&status);
+
+				if (PID == 0) {
+					// child
+					if (execvp(base, (char**)args -> array) == -1) {
+						printError("Command failure", 1);
+					}
+				} else {
+					// parent
+					wait(&status);
+				}
 			}
 		}
 
-		commandDeconstruct(cmd);
+		cleanUpCommand(cl);
 	}
 
 	/*_exit(EXIT_SUCCESS);*/
