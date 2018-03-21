@@ -8,7 +8,9 @@
 
 #include "shell.h"
 
+
 int PID;
+
 
 void sigactionHandler(int sig) {
 	switch (sig) {
@@ -74,6 +76,5 @@ int main(int argc, char* argv[]) {
 		commandDeconstruct(cmd);
 	}
 
-	/*_exit(EXIT_SUCCESS);*/
-	return 0;
+	return EXIT_SUCCESS;
 }
