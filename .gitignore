@@ -5,3 +5,4 @@ shell
 tester
 ash
 *.dSYM
+.gdb_history
