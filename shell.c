@@ -12,7 +12,7 @@ void notAvailable(void) {
 bool builtIns(const char* command, const char* arg) {
 	bool matched = false;
 
-	if (strncmp(command, "pwd", 3)) {
+	if (!strncmp(command, "pwd", 3)) {
 		char cwd[512];
 		char* ptr;
 
@@ -34,13 +34,13 @@ bool builtIns(const char* command, const char* arg) {
 		writeStdout("\n", 1);
 
 		matched = true;
-	} else if (strncmp(command, "cd", 2)) {
+	} else if (!strncmp(command, "cd", 2)) {
 		if (chdir(arg) < 0) {
 			printError("Failed to change directory", 1);
 		};
 
 		matched = true;
-	} else if (strncmp(command, "exit", 4)) {
+	} else if (!strncmp(command, "exit", 4)) {
 		exit(EXIT_SUCCESS);
 
 		matched = true;

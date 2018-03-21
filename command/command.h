@@ -10,7 +10,7 @@
 #include "../utils/string.h"
 
 
-typedef struct command {
+typedef struct Command {
 	char* cmd;         // base command
 	Vector* args;      // arguments
 	bool pipe;         // should it pipe to next?
