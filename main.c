@@ -1,15 +1,15 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include <signal.h>
+#include <stdbool.h>
 #include <stdint.h>
-
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <signal.h>
 
 #include "shell.h"
 
 
-int PID;
+volatile int PID;
 
 
 void sigactionHandler(int sig) {
@@ -17,8 +17,8 @@ void sigactionHandler(int sig) {
 		case SIGINT: {
 			if (PID > 0) {
 				kill(PID, SIGINT);
-				wait(NULL);
-				PID = 0;
+				/*wait(NULL);*/
+				/*PID = 0;*/
 				flush();
 			} else {
 				flush();
@@ -38,7 +38,7 @@ void handleSignals(void) {
 	struct sigaction act;
 	act.sa_handler = &sigactionHandler;
 	// don't reset the handler
-	act.sa_flags = 0;
+	act.sa_flags = SA_RESTART;
 
 	if (sigaction(SIGINT, &act, NULL) < 0) {
 		printError("signal handler not registered properly", 1);
@@ -50,7 +50,8 @@ int main(int argc, char* argv[]) {
 
 	CommandLine* cl;
 	char* input;
-	while (1) {
+
+	while (true) {
 		prompt();
 
 		input = readStdin();
@@ -62,7 +63,7 @@ int main(int argc, char* argv[]) {
 			char* base = cmd -> cmd;
 			Vector* args = cmd -> args;
 
-			uint32_t cont = builtIns(base, vectorGet(args, 1));
+			bool cont = builtIns(base, vectorGet(args, 1));
 
 			if (!cont && base[0] != '\0') {
 				int status;

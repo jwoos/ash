@@ -2,14 +2,15 @@
 #define ASH_SHELL_H
 
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdint.h>
-
-#include <sys/wait.h>
 #include <errno.h>
-#include <unistd.h>
 #include <signal.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #include "utils/io.h"
 #include "utils/string.h"
@@ -20,7 +21,7 @@ void prompt(void);
 
 void notAvailable(void);
 
-uint32_t builtIns(char*, char*);
+bool builtIns(const char*, const char*);
 
 
 #endif

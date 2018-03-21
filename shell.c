@@ -9,21 +9,19 @@ void notAvailable(void) {
 	writeStdout("Not supported yet\n", 18);
 }
 
-uint32_t builtIns(char* command, char* arg) {
-	char* pwd = "pwd";
-	char* cd = "cd";
-	char* quit = "exit";
+bool builtIns(const char* command, const char* arg) {
+	bool matched = false;
 
-	int matched = 0;
-
-	if (strEqual(command, pwd)) {
+	if (strncmp(command, "pwd", 3)) {
 		char cwd[512];
 		char* ptr;
 
 		getcwd(cwd, sizeof(cwd));
 		ptr = cwd;
 
-		if (errno == ERANGE) {
+		while (errno == ERANGE) {
+			errno = 0;
+
 			char biggerCwd[1024];
 			getcwd(biggerCwd, sizeof(biggerCwd));
 
@@ -35,17 +33,17 @@ uint32_t builtIns(char* command, char* arg) {
 		writeStdout(ptr, actualSize);
 		writeStdout("\n", 1);
 
-		matched = 1;
-	} else if (strEqual(command, cd)) {
+		matched = true;
+	} else if (strncmp(command, "cd", 2)) {
 		if (chdir(arg) < 0) {
 			printError("Failed to change directory", 1);
 		};
 
-		matched = 1;
-	} else if (strEqual(command, quit)) {
-		_exit(EXIT_SUCCESS);
+		matched = true;
+	} else if (strncmp(command, "exit", 4)) {
+		exit(EXIT_SUCCESS);
 
-		matched = 1;
+		matched = true;
 	}
 
 	return matched;
